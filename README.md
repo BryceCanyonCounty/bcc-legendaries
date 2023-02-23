@@ -11,15 +11,18 @@
 - Everything is easily configurable in the Config.lua
 
 ## How it works
-You can set up the hunter(the location you go to start hunts) coordinates in the Config.lua and when you go there you will find an npc and some text. Do what the text says to open the hunt menu.
+- You can set up the hunter(the location you go to start hunts) coordinates in the Config.lua and when you go there you will find an npc and some text. Do what the text says to open the hunt menu.
 
 ## Why use it
-It has alot of cool features too it. I will offer as much support as I can for it. Will add some more stuff to do in your RedM server. Is a overall fun quest style hunt.
+- It has alot of cool features too it. 
+- I will offer as much support as I can for it. 
+- Will add some more stuff to do in your RedM server. 
+- Is a overall fun quest style hunt.
 
 ## Requirements
--VORP Core
--VORP Utils
--VORP Inventory
+- VORP Core
+- VORP Utils
+- VORP Inventory
 
 ## Installation Steps
 - Add the file to your resource file
