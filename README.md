@@ -4,10 +4,10 @@
 
 ## Features
 - Menu for the hunts
-- Can create your own hunts in the Config.lua
-- Gives rewards when the player skins the animal. Rewards are configurable in the Config.lua
+- Can create your own hunts
+- Gives rewards when the player skins the animal
 - Can enable or disable enemy npcs during the hunt
-- Global cooldown between hunts which is configurable in the config.lua
+- Global cooldown between hunts
 - Everything is easily configurable in the Config.lua
 
 ## How it works
