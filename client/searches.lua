@@ -44,7 +44,7 @@ function searchsetup1()
                 PromptGroup:ShowGroup("Search Chest") --Names the prompt search chest
                 if firstprompt:HasCompleted() then --if the prmpt has been done then
                     firstprompt:DeletePrompt() --deletes prompt
-                    VORPutils.Blips:RemoveBlip(blip) --removes blip
+                    blip:Remove()
                     ClearGpsMultiRoute() --stops the gps waypoint system
                     Citizen.CreateThread(function() --Starts the play animation setup(This entire thread is needed)
                         RequestAnimDict('mech_ransack@chest@med@open@crouch@b') --Checks to see if its loaded
