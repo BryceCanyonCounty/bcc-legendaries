@@ -9,7 +9,7 @@
 - Can enable or disable enemy npcs during the hunt
 - Global cooldown between hunts
 - Can enable or disable extra animals to spawn and fight you when you find the legendary animal
-- Comes default with 5 supported languages en, es, fr, tr, de
+- Comes default with 4 supported languages en, es, fr, de
 - Everything is easily configurable in the Config.lua
 
 ## How it works
