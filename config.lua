@@ -1,6 +1,6 @@
 Config = {}
 
-Language = "en_lang" -- change en to change the languarge. Supported languages: en, es, de, fr, tr
+Language = "en_lang" -- change en to change the languarge. Supported languages: en, es, de, fr
 
 Config.shop = {
     shoplocation = { x = 1704.63, y = 1489.88, z = 146.52 }, --this is where the shop will be
