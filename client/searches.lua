@@ -21,8 +21,8 @@ function searchsetup1()
     local object = CreateObject('p_chest01x', c.x, c.y, c.z - 1, true, false, false) --creates an object
     RequestModel(object, true) --requests the object model
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup() --registers a prompt group
-    local firstprompt = PromptGroup:RegisterPrompt('Search the Chest for clues', 0x760A9C6F, 1, 1, true, 'hold', {timedeventhash = "MEDIUM_TIMED_EVENT"}) --creates a prompt in the prompt group
-    local blip = VORPutils.Blips:SetBlip('Clue', 'blip_mp_collector_map', 0.8, c.x, c.y, c.z) --sets blip
+    local firstprompt = PromptGroup:RegisterPrompt(_U("ChestPrompt"), 0x760A9C6F, 1, 1, true, 'hold', {timedeventhash = "MEDIUM_TIMED_EVENT"}) --creates a prompt in the prompt group
+    local blip = VORPutils.Blips:SetBlip(_U("Lastlocationblip"), 'blip_mp_collector_map', 0.8, c.x, c.y, c.z) --sets blip
     --Waypointsetup
     local ul = GetEntityCoords(PlayerPedId()) --gets players location(not needed if alreadysetup)
     StartGpsMultiRoute(6, true, true) --sets the color and tells it to waypoint on foot and in vehicle
@@ -41,7 +41,7 @@ function searchsetup1()
                 Searchinrange = 2 --sets the trigger to 2
             end
             if Searchinrange == 1 then --if the trigger is 1 then
-                PromptGroup:ShowGroup("Search Chest") --Names the prompt search chest
+                PromptGroup:ShowGroup(_U("ChestPrompt")) --Names the prompt search chest
                 if firstprompt:HasCompleted() then --if the prmpt has been done then
                     firstprompt:DeletePrompt() --deletes prompt
                     blip:Remove()
@@ -53,7 +53,7 @@ function searchsetup1()
                         end
                         TaskPlayAnim(PlayerPedId(), 'mech_ransack@chest@med@open@crouch@b', 'base', 8.0, 8.0, 1000, 17, 0.2, false, false, false) --plays the animation
                     end) --end of animation setup
-                    VORPcore.NotifyBottomRight("You found a clue pointing to the " .. Thuntname)
+                    VORPcore.NotifyBottomRight(_U("Cluefound"), 4000)
                     if Npcspawnyn == true then
                         npc() break
                     elseif Npcspawnyn == false then
@@ -65,7 +65,7 @@ function searchsetup1()
             blip:Remove()
             firstprompt:DeletePrompt() --removes the prompt
             ClearGpsMultiRoute() --removes waypoint/gps
-            VORPcore.NotifyBottomRight('You died. Hunt failed', 6000) break --prints in bottom right and breaks loop
+            VORPcore.NotifyBottomRight(_U("Deadtext"), 6000) break --prints you died and failed in bottom right and breaks loop
         end
     end
 end

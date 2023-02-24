@@ -1,14 +1,16 @@
 Config = {}
 
+Language = "en_lang" -- change en to change the languarge. Supported languages: en, es, de, fr, tr
+
 Config.shop = {
     shoplocation = { x = 1704.63, y = 1489.88, z = 146.52 }, --this is where the shop will be
-    shoptext = 'hunt', --this is what the shops main display text will be
 }
 
 GlobalHuntCooldown = 7200000 --this is how long before the hunter will allow you to do another hunt this is server sided so once someone does it everyone has to wait until this timer is over to do another hunt
 
 Config.locations = {
     { --gator setup
+        Leganimalhealth = 500, -- sets the legendary animals health amount max is 1000 I believe
         investigationspot = {x = 1718.58, y = -1001.05, z = 41.84}, --this is where the first chest will spawn
         huntname = 'Gator', --the name of the hunt in the menu
         enemynpc = true, --if you want to fight enemy npcs or not
@@ -31,9 +33,18 @@ Config.locations = {
             {x = 1881.26, y = -754.46, z = 41.7},
             {x = 1875.95, y = -755.99, z = 41.5},
         },
+        SecondaryAnimals = {
+            secondaryanimals = true, --if true it will spawn animals along with the legendary animal to help it
+            animalmodel = 'A_C_Alligator_01', --this is the model of the secondary animal. Make sure this is not the same model as any legendary animals
+            Animalspawns = {
+                {x = 1996.61, y = -1761.09, z = 41.51},
+                {x = 1992.2, y = -1761.04, z = 41.16},
+            },
+        },
     },
     {
         --bear setup
+        Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = 1197.62, y = 2034.54, z = 322.93},
         huntname = 'Bear',
         enemynpc = true,
@@ -54,9 +65,18 @@ Config.locations = {
             {x = 721.45, y = 1866.38, z = 239.81},
             {x = 722.36, y = 1845.43, z = 237.87},
         },
+        SecondaryAnimals = {
+            secondaryanimals = false, --if true it will spawn animals along with the legendary animal to help it
+            animalmodel = 'A_C_Alligator_01', --this is the model of the secondary animal. Make sure this is not the same model as any legendary animals
+            Animalspawns = {
+                {x = 1996.61, y = -1761.09, z = 41.51},
+                {x = 1992.2, y = -1761.04, z = 41.16},
+            },
+        },
     },
     {
         --wolf setup
+        Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = -1726.5, y = -87.84, z = 181.28},
         huntname = 'Wolf',
         enemynpc = true,
@@ -77,9 +97,18 @@ Config.locations = {
             {x = -1808.34, y = 660.62, z = 132.2},
             {x = -1809.72, y = 668.07, z = 133.31},
         },
+        SecondaryAnimals = {
+            secondaryanimals = false, --if true it will spawn animals along with the legendary animal to help it
+            animalmodel = 'A_C_Alligator_01', --this is the model of the secondary animal. Make sure this is not the same model as any legendary animals
+            Animalspawns = {
+                {x = 1996.61, y = -1761.09, z = 41.51},
+                {x = 1992.2, y = -1761.04, z = 41.16},
+            },
+        },
     },
     {
         --boar setup
+        Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = 757.77, y = -842.5, z = 55.24},
         huntname = "Boar",
         enemynpc = true,
@@ -100,9 +129,18 @@ Config.locations = {
             {x = 898.0, y = 249.3, z = 119.09},
             {x = 892.39, y = 247.5, z = 117.96},
         },
+        SecondaryAnimals = {
+            secondaryanimals = false, --if true it will spawn animals along with the legendary animal to help it
+            animalmodel = 'A_C_Alligator_01', --this is the model of the secondary animal. Make sure this is not the same model as any legendary animals
+            Animalspawns = {
+                {x = 1996.61, y = -1761.09, z = 41.51},
+                {x = 1992.2, y = -1761.04, z = 41.16},
+            },
+        },
     },
     {
         --fox
+        Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = 1470.33, y = -1723.61, z = 61.85},
         huntname = "Fox",
         enemynpc = false,
@@ -122,6 +160,14 @@ Config.locations = {
             {x = 894.24, y = 251.26, z = 118.7},
             {x = 898.0, y = 249.3, z = 119.09},
             {x = 892.39, y = 247.5, z = 117.96},
+        },
+        SecondaryAnimals = {
+            secondaryanimals = false, --if true it will spawn animals along with the legendary animal to help it
+            animalmodel = 'A_C_Alligator_01', --this is the model of the secondary animal. Make sure this is not the same model as any legendary animals
+            Animalspawns = {
+                {x = 1996.61, y = -1761.09, z = 41.51},
+                {x = 1992.2, y = -1761.04, z = 41.16},
+            },
         },
     },
     --[[If you want to add new hunts i will include an example below just remove the comment and change what you want

@@ -10,7 +10,7 @@ end)
 StopAll = false
 --Menu Setup
 Citizen.CreateThread(function()
-    WarMenu.CreateMenu('leg', 'Legendary Hunts') --creates the main menu
+    WarMenu.CreateMenu('leg', _U("Menuname")) --creates the main menu
     repeat --repeates until it ends/breaks
         if WarMenu.IsMenuOpened('leg') then --if the menu is opened then
             for k, v in pairs(Config.locations) do --opens the tables
@@ -27,7 +27,11 @@ Citizen.CreateThread(function()
                         Thuntname = v.huntname
                         Npcspawnyn = v.enemynpc
                         Rewards = v.GivenItems
-                        VORPcore.NotifyBottomRight("A clue to the " .. v.huntname .. " whereabouts has been marked",6000) --text in bottom right
+                        Health = v.Leganimalhealth
+                        Secondarynpcspawn = v.SecondaryAnimals.Animalspawns
+                        Secondarynpcboolean = v.SecondaryAnimals.secondaryanimals
+                        Secondarynpcmodel = v.SecondaryAnimals.animalmodel
+                        VORPcore.NotifyBottomRight(_U("Initialblipmark"),6000) --text in bottom right
                         offcatcher() --triggers offcatcher
                         searchsetup1() --triggers the search setup
                         WarMenu.CloseMenu() --closes the menu
@@ -42,7 +46,7 @@ end)
 
 RegisterNetEvent('failmenuopen')
 AddEventHandler('failmenuopen', function()
-    VORPcore.NotifyBottomRight('I have nothing to offer currently come back later', 4000)
+    VORPcore.NotifyBottomRight(_U("Cooldownactive"), 4000)
 end)
 
 Citizen.CreateThread(function()
