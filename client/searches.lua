@@ -22,7 +22,8 @@ function searchsetup1()
     RequestModel(object, true) --requests the object model
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup() --registers a prompt group
     local firstprompt = PromptGroup:RegisterPrompt(_U("ChestPrompt"), 0x760A9C6F, 1, 1, true, 'hold', {timedeventhash = "MEDIUM_TIMED_EVENT"}) --creates a prompt in the prompt group
-    local blip = VORPutils.Blips:SetBlip(_U("Lastlocationblip"), 'blip_mp_collector_map', 0.8, c.x, c.y, c.z) --sets blip
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, c.x, c.y, c.z, 100.0)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U("Lastlocationblip"))
     --Waypointsetup
     local ul = GetEntityCoords(PlayerPedId()) --gets players location(not needed if alreadysetup)
     StartGpsMultiRoute(6, true, true) --sets the color and tells it to waypoint on foot and in vehicle
@@ -44,7 +45,7 @@ function searchsetup1()
                 PromptGroup:ShowGroup(_U("ChestPrompt")) --Names the prompt search chest
                 if firstprompt:HasCompleted() then --if the prmpt has been done then
                     firstprompt:DeletePrompt() --deletes prompt
-                    blip:Remove()
+                    RemoveBlip(blip)
                     ClearGpsMultiRoute() --stops the gps waypoint system
                     Citizen.CreateThread(function() --Starts the play animation setup(This entire thread is needed)
                         RequestAnimDict('mech_ransack@chest@med@open@crouch@b') --Checks to see if its loaded
@@ -62,7 +63,7 @@ function searchsetup1()
                 end
             end
         elseif StopAll == true then --if it is false or if player is dead then stop everything above and do this
-            blip:Remove()
+            RemoveBlip(blip)
             firstprompt:DeletePrompt() --removes the prompt
             ClearGpsMultiRoute() --removes waypoint/gps
             VORPcore.NotifyBottomRight(_U("Deadtext"), 6000) break --prints you died and failed in bottom right and breaks loop

@@ -33,7 +33,8 @@ function spawnanimal()
         Citizen.Wait(1)
     end --end dont know but is needed
     distancetracker = true --sets the trigger to true so it allows the while loop to work
-    local blip = VORPutils.Blips:SetBlip(_U("Lastlocationblip"), 'blip_mp_collector_map', 0.8, coords.x, coords.y, coords.z) --sets a blip until you are within the distance
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U("Lastlocationblip"))
     --Waypointsetup
     local ul = GetEntityCoords(PlayerPedId()) --gets players location(not needed if alreadysetup)
     StartGpsMultiRoute(6, true, true) --sets the color and tells it to waypoint on foot and in vehicle
@@ -60,7 +61,7 @@ function spawnanimal()
                 if catch17 == false then --if catch17 is false then
                     catch17 = true --sets it to true to prevent the code below from running again since this is in a loop
                     ClearGpsMultiRoute() --deletes the waypoint
-                    blip:Remove()
+                    RemoveBlip(blip)
                     Createdped2 = CreatePed(model, coords.x, coords.y, coords.z, true, true, true, true) --creates the ped
                     Citizen.InvokeNative(0x283978A15512B2FE, Createdped2, true) --This sets the ped into a random outift(fixes an invisiblity bug)
                     Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, Createdped2) --sets the blip that tracks the ped
@@ -81,7 +82,7 @@ function spawnanimal()
         elseif StopAll == true then --else if it is true(player dead) then
             if Dist9 > 40 then --if distance is greater than 50 then
                 ClearGpsMultiRoute() --clears waypoint
-                blip:Remove()
+                RemoveBlip(blip)
             end
             Citizen.Wait(2000) --waits 2 seconds
             DeletePed(createdped) --deletes ped

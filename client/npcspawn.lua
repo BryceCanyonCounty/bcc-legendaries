@@ -26,7 +26,8 @@ function npc()
     local model = GetHashKey('a_m_m_huntertravelers_cool_01') --sets the model to the varible ped to make set in the menu part of the code(Animal is a global set in menusetup.lua)
     local check = false
     distancetracker = true --sets the trigger to true so it allows the while loop to work
-    local blip = VORPutils.Blips:SetBlip(_U("Lastlocationblip"), 'blip_mp_collector_map', 0.8, Npcblipcoords.x, Npcblipcoords.y, Npcblipcoords.z) --sets blip
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, Npcblipcoords.x, Npcblipcoords.y, Npcblipcoords.z, 100.0)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U("Lastlocationblip"))
     --Waypointsetup
     local ul = GetEntityCoords(PlayerPedId()) --gets players location(not needed if alreadysetup)
     StartGpsMultiRoute(6, true, true) --sets the color and tells it to waypoint on foot and in vehicle
@@ -56,7 +57,7 @@ function npc()
                 if check == false then --if the catch varaible is false then do
                     check = true --sets it to true to prevent this running more than once
                     ClearGpsMultiRoute() --stops the gps waypoint system
-                    blip:Remove()
+                    RemoveBlip(blip)
                     Nrange = Nrange + 1 --makes nrange 2 prevents it from running more than once
                     for k, v in pairs(Npccoords) do --opens npccoords table
                         createdped[k] = CreatePed(model, v.x, v.y, v.z, true, true, true, true) -- creates 1 ped per coordinate set in the npccoords table in config
@@ -95,7 +96,7 @@ function npc()
             for k, v in pairs(createdped) do --opens createdped table
                 DeletePed(v) --deletes all peds spawned
             end
-            blip:Remove()
+            RemoveBlip(blip)
             ClearGpsMultiRoute() --removes waypoint
             VORPcore.NotifyBottomRight(_U("Deadtext"), 6000) break --prints you died and failed in bottom right and breaks loop
         end
@@ -107,7 +108,8 @@ function npcsearch1()
     RequestModel(object, true) --requests the object model
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup() --registers a prompt group
     local firstprompt = PromptGroup:RegisterPrompt(_U("ChestPrompt"), 0x760A9C6F, 1, 1, true, 'hold', {timedeventhash = "MEDIUM_TIMED_EVENT"}) --creates a prompt in the prompt group
-    local blip = VORPutils.Blips:SetBlip(_U("ClueBlip"), 'blip_mp_collector_map', 0.8, Npcchest.x, Npcchest.y, Npcchest.z) --sets blip
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, Npcchest.x, Npcchest.y, Npcchest.z, 100.0)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U("Lastlocationblip"))
     --Waypointsetup
     local ul = GetEntityCoords(PlayerPedId()) --gets players location(not needed if alreadysetup)
     StartGpsMultiRoute(6, true, true) --sets the color and tells it to waypoint on foot and in vehicle
@@ -129,7 +131,7 @@ function npcsearch1()
                 PromptGroup:ShowGroup(_U("ChestPrompt")) --Names the prompt search chest
                 if firstprompt:HasCompleted() then --if the prmpt has been done then
                     firstprompt:DeletePrompt() --deletes prompt
-                    blip:Remove()
+                    RemoveBlip(blip)
                     ClearGpsMultiRoute() --stops the gps waypoint system
                     Citizen.CreateThread(function() --Starts the play animation setup(This entire thread is needed)
                         RequestAnimDict('mech_ransack@chest@med@open@crouch@b') --Checks to see if its loaded
@@ -145,7 +147,7 @@ function npcsearch1()
             end
         elseif StopAll == true then --if varaible = true(player is dead) then
             if Searchinrange2 == 1 then --if you are in range then it deletes the blip
-                blip:Remove()
+                RemoveBlip(blip)
                 ClearGpsMultiRoute() --clears gps
             end
             firstprompt:DeletePrompt() --deletes prompt group
