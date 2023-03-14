@@ -1,23 +1,22 @@
 --Pulls vorp core
-
 local VORPcore = {}
-
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
-
 --end pulling it
-StopAll = false
+
+StopAll = false --This is the variable used for the dead check
 --Menu Setup
 Citizen.CreateThread(function()
-    WarMenu.CreateMenu('leg', _U("Menuname")) --creates the main menu
+    WarMenu.CreateMenu('hd_legendaries:leg', _U("Menuname")) --creates the main menu
     repeat --repeates until it ends/breaks
-        if WarMenu.IsMenuOpened('leg') then --if the menu is opened then
+        if WarMenu.IsMenuOpened('hd_legendaries:leg') then --if the menu is opened then
             for k, v in pairs(Config.locations) do --opens the tables
-                if WarMenu.Button(v.huntname, '', v.animaldisplaytext) then --creates the spawnbutton
-                    TriggerServerEvent('menuopen5') --triggers the server cooldown event
-                    RegisterNetEvent('menuopen4') --creates a client event
-                    AddEventHandler('menuopen4', function() --adds a function to the client event
+                if WarMenu.Button(v.huntname .. ' Price to Hunt ' .. tostring(v.hintcost) .. '$ ') then --creates the spawnbutton
+                    Cost = v.hintcost
+                    TriggerServerEvent('hd_legendaries:menuopen5', Cost) --triggers the server cooldown event
+                    RegisterNetEvent('hd_legendaries:menuopen4') --creates a client event
+                    AddEventHandler('hd_legendaries:menuopen4', function() --adds a function to the client event
                         Animal = v.pedmodel --sets varible to the config option to be used in the other .lua files
                         Animalcoords = v.coordinates
                         Npccoords = v.Npccoords
@@ -44,8 +43,8 @@ Citizen.CreateThread(function()
     until false
 end)
 
-RegisterNetEvent('failmenuopen')
-AddEventHandler('failmenuopen', function()
+RegisterNetEvent('hd_legendaries:failmenuopen')
+AddEventHandler('hd_legendaries:failmenuopen', function()
     VORPcore.NotifyBottomRight(_U("Cooldownactive"), 4000)
 end)
 
@@ -55,7 +54,7 @@ Citizen.CreateThread(function()
         local l = Config.shop
         if GetDistanceBetweenCoords(l.shoplocation.x, l.shoplocation.y, l.shoplocation.z, GetEntityCoords(PlayerPedId()), false) < 2 then
             if IsControlJustReleased(0, 0x760A9C6F) then
-                WarMenu.OpenMenu('leg')
+                WarMenu.OpenMenu('hd_legendaries:leg')
             end
         end
     end

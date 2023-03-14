@@ -1,19 +1,12 @@
---Do not touch anything in here if you do not know what you are doing. At the very least make a back up before you do.
-
-
+--Pulls vorp utils and core
 local VORPutils = {}
-
 TriggerEvent("getUtils", function(utils)
     VORPutils = utils
 end)
---Pulls vorp core
-
 local VORPcore = {}
-
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
-
 --end pulling it
 
 --npc spawn setup

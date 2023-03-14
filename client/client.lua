@@ -1,19 +1,8 @@
---Do not touch anything in here if you do not know what you are doing. At the very least make a back up before you do.
-
-
-local VORPutils = {}
-
-TriggerEvent("getUtils", function(utils)
-    VORPutils = utils
-end)
---Pulls vorp core
-
+--Pulls Vorp Core
 local VORPcore = {}
-
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
-
 --end pulling it
 
 --Animal spawn setup
