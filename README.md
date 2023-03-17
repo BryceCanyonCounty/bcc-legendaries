@@ -3,17 +3,20 @@
 >This is a simple easily configurable Legendary Animal Hunting Script for RedM.
 
 ## Features
-- Menu for the hunts
-- Can create your own hunts
-- Gives rewards when the player skins the animal
-- Can enable or disable enemy npcs during the hunt
-- Global cooldown between hunts
-- Can enable or disable extra animals to spawn and fight you when you find the legendary animal
-- Comes default with 4 supported languages en, es, fr, de
-- Everything is easily configurable in the Config.lua
+- Menu for the hunts!
+- Can create your own hunts!
+- Gives rewards when the player skins the animal!
+- Can enable or disable enemy npcs during the hunt!
+- Global cooldown between hunts!
+- Can enable or disable extra animals to spawn and fight you when you find the legendary animal!
+- Easy to translate via Config.language in the config.lua file!
+- Everything is easily configurable in the Config.lua!
+- Leveling system! (optional can be enabled or disabled via config.lua)
+- Leveling system allows you to create an infinite number of levels, and at intervals you set will decrease the hint price by an amount you set (all done through config.lua)
 
 ## How it works
 - You can set up the hunter(the location you go to start hunts) coordinates in the Config.lua and when you go there you will find an npc and some text. Do what the text says to open the hunt menu.
+- Leveling system works by each hunt you successfully do, your level increases by a set amount(set in config) and the higher level you are the cheaper the hints are!
 
 ## Why use it
 - It has alot of cool features too it. 
@@ -38,3 +41,4 @@
 - I really hope you enjoy the script thanks for trying it!
 - I have optimized this code quite alot, but if you see any code that can be optimized further please open a pull request and I will take a look if it works I will merge it. Or just tell me lol.
 - You can edit the code obviously. All I ask is that you release the edits to the community freely.
+- The level system automatically creates a table in your database if you set it too true in the config. So there is no sql file to run!
