@@ -51,7 +51,7 @@ end)
 
 ---------------------------------------- TESTING DATABASE --------------------------------------------------
 
---------- This will create the hd_farming table on script launch if it does not already exist -----------------
+--------- This will create the hd_legendaries table on script launch if it does not already exist -----------------
 -------Pulled from bcc-pets and modified ----------------------
 Citizen.CreateThread(function()
   --Using oxmysql to create the table if its not already made every time script is launched
