@@ -1,13 +1,33 @@
 Config = {}
 
-Language = "en_lang" -- change en to change the languarge. Supported languages: en, es, de, fr
-
 Config.shop = {
-    shoplocation = { x = 1704.63, y = 1489.88, z = 146.52 }, --this is where the shop will be
+    shoplocation = { x = 1704.63, y = 1489.88, z = 146.52 }, --this is where the shop will be(you can not add more only edit the existing one)
 }
 
 GlobalHuntCooldown = 7200000 --this is how long before the hunter will allow you to do another hunt this is server sided so once someone does it everyone has to wait until this timer is over to do another hunt
 
+-------------------------- Level System Setup ------------------------------------
+Config.LevelSystem = true --Set this true to use the level system, false will disable it
+Config.LevelIncreaseperHunt = 1 --This is how much your level will go up per completed hunt
+Config.Levels = {
+    {
+        level = 10, --Level you have to be at
+        costreduction = 10, -- The Hunt's will cost this much less to start
+        nextlevel = 20, --This has to be the number of the next level so since the next level is 20 it has to be set to 20
+    },
+    {
+        level = 20,
+        costreduction = 20,
+        nextlevel = 30,
+    },
+    {
+        level = 30,
+        costreduction = 30,
+        nextlevel = 40,
+    },--Can add or remove levels by copy pasting a table and changing what you need
+}
+
+----------------------------------- Hunt Setup ------------------------------------
 Config.locations = {
     { --gator setup
         hintcost = 50,
@@ -169,6 +189,25 @@ Config.locations = {
                 {x = 1992.2, y = -1761.04, z = 41.16},
             },
         },
-    },
-    --Too add more hunts just copy and paste one from above and change what you need
+    },--Too add more hunts just copy and paste one from above and change what you need
+}
+
+------------------------------------------ TRANSLATE HERE! ------------------------------------------------------
+Config.Language = {
+    Deadtext = 'You died, hunt failed',
+    Cluefound = 'You found a clue pointing to the animals location',
+    Initialblipmark = 'The last known location of the animal has been marked',
+    Poachersattack = 'Watch Out Poachers are attacking!',
+    Cooldownactive = 'I have nothing to offer come back later',
+    Lastlocationblip = 'Last Location',
+    Poachersdead = 'You killed the poachers now look around for any clues',
+    Poacherschestblip = 'Poachers Chest',
+    ChestPrompt = 'Search the chest',
+    ClueBlip = 'Clue',
+    Menuname = "Legendary Hunts",
+    Hunterblip = "Hunter",
+    Shoptext = 'Press "G" to see what the hunter is offering',
+    LegAnimalSpawned = 'The Animal is Nearby!',
+    AnimalSkinned = 'You skinned the Animal, and got its pelt!',
+    Leveldisp = 'Your Current Level'
 }

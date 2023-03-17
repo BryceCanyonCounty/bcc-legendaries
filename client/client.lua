@@ -23,7 +23,7 @@ function spawnanimal()
     end --end dont know but is needed
     distancetracker = true --sets the trigger to true so it allows the while loop to work
     local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0)
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U("Lastlocationblip"))
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip)
     --Waypointsetup
     local ul = GetEntityCoords(PlayerPedId()) --gets players location(not needed if alreadysetup)
     StartGpsMultiRoute(6, true, true) --sets the color and tells it to waypoint on foot and in vehicle
@@ -54,6 +54,7 @@ function spawnanimal()
                     Createdped2 = CreatePed(model, coords.x, coords.y, coords.z, true, true, true, true) --creates the ped
                     Citizen.InvokeNative(0x283978A15512B2FE, Createdped2, true) --This sets the ped into a random outift(fixes an invisiblity bug)
                     Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, Createdped2) --sets the blip that tracks the ped
+                    VORPcore.NotifyBottomRight(Config.Language.LegAnimalSpawned, 4000)
                     SetEntityHealth(Createdped2, Health, 0) --changes the entity health to a higher amount
                     Citizen.CreateThread(function()
                         deadcheck = true --sets deadcheck to true
@@ -75,7 +76,7 @@ function spawnanimal()
             end
             Citizen.Wait(2000) --waits 2 seconds
             DeletePed(createdped) --deletes ped
-            VORPcore.NotifyBottomRight(_U("Deadtext"), 6000) break --prints you died and failed in bottom right and breaks loop
+            VORPcore.NotifyBottomRight(Config.Language.Deadtext, 6000) break --prints you died and failed in bottom right and breaks loop
         end
     end
 end

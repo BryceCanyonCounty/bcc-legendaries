@@ -14,7 +14,7 @@ RegisterNetEvent('hd_legendaries:pedspawn')
 AddEventHandler('hd_legendaries:pedspawn', function()
     local model = GetHashKey('mp_re_slumpedhunter_males_01') --sets the npc model
     local v = Config.shop
-    local blip = VORPutils.Blips:SetBlip(_U("Hunterblip"), 'blip_taxidermist', 0.8, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z)
+    local blip = VORPutils.Blips:SetBlip(Config.Language.Hunterblip, 'blip_taxidermist', 0.8, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z)
     RequestModel(model) -- requests the varible model
     if not HasModelLoaded(model) then --checks if its loaded
         RequestModel(model)
@@ -40,7 +40,7 @@ Citizen.CreateThread(function()
         local playercoord = GetEntityCoords(player) --gets the players ped coordinates
         local dist = GetDistanceBetweenCoords(playercoord.x, playercoord.y, playercoord.z, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z, false) --gets the distance between coords
         if dist < 10 then -- if distance is less than 10 do
-            DrawText3D(v.shoplocation.x, v.shoplocation.y, v.shoplocation.z, _U("Shoptext")) --creates the text
+            DrawText3D(v.shoplocation.x, v.shoplocation.y, v.shoplocation.z, Config.Language.Shoptext) --creates the text
         end
     end
 end)
