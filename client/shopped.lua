@@ -5,13 +5,9 @@ TriggerEvent("getUtils", function(utils)
 end)
 --end Pulling utils
 
-Citizen.CreateThread(function() --Creates a thread that runs on launch of client. Triggers ped spawn server event.
-    TriggerServerEvent('hd_legendaries:pedspawns') --this will run once per player join but server has a catch varaible so it only runs once
-end)
 
-local pedlock = 0 --creates a catch  variable
-RegisterNetEvent('hd_legendaries:pedspawn')
-AddEventHandler('hd_legendaries:pedspawn', function()
+-----------------Handles spawning the ped---------------------------
+Citizen.CreateThread(function()
     local model = GetHashKey('mp_re_slumpedhunter_males_01') --sets the npc model
     local v = Config.shop
     local blip = VORPutils.Blips:SetBlip(Config.Language.Hunterblip, 'blip_taxidermist', 0.8, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z)
@@ -22,20 +18,14 @@ AddEventHandler('hd_legendaries:pedspawn', function()
     while not HasModelLoaded(model) or HasModelLoaded(model) == 0 or model == 1 do -- not sure but its needed
         Citizen.Wait(1)
     end
-    if pedlock == 0 then
-        local createdped = CreatePed(model, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z - 1, true, true, true, true) --creates ped the minus one makes it so its standing on the ground not floating
-        Citizen.InvokeNative(0x283978A15512B2FE, createdped, true) -- sets ped into random outfit, stops it being invis
-        SetEntityAsMissionEntity(createdped, true, true) -- sets ped as mission entity preventing it from despawning
-        SetEntityInvincible(createdped, true) --sets ped invincible
-        FreezeEntityPosition(createdped, true) --freezes the entity
-        pedlock = pedlock + 1
-    end
-end)
-
-Citizen.CreateThread(function()
+    local createdped = CreatePed(model, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z - 1, false, true, true, true) --creates ped the minus one makes it so its standing on the ground not floating
+    Citizen.InvokeNative(0x283978A15512B2FE, createdped, true) -- sets ped into random outfit, stops it being invis
+    SetEntityAsMissionEntity(createdped, true, true) -- sets ped as mission entity preventing it from despawning
+    SetEntityInvincible(createdped, true) --sets ped invincible
+    FreezeEntityPosition(createdped, true) --freezes the entity
+    ---------------------------Handles opening the menu
     while true do -- creates a loop to keep the text up and the distance constantly checked
-        Citizen.Wait(0) --makes it wait a slight amount (avoids crashing is needed)
-        local v = Config.shop
+        Citizen.Wait(10) --makes it wait a slight amount (avoids crashing is needed)
         local player = PlayerPedId() --gets the players ped
         local playercoord = GetEntityCoords(player) --gets the players ped coordinates
         local dist = GetDistanceBetweenCoords(playercoord.x, playercoord.y, playercoord.z, v.shoplocation.x, v.shoplocation.y, v.shoplocation.z, false) --gets the distance between coords
@@ -61,5 +51,3 @@ function DrawText3D(x, y, z, text)
 	  DrawSprite("feeds", "hud_menu_4a", _x, _y+0.0125,0.015+ factor, 0.03, 0.1, 35, 35, 35, 190, 0)
 	end
 end
---end 3d text ability
---end of shop npc setup

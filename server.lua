@@ -39,16 +39,6 @@ AddEventHandler('hd_legendaries:menuopen5', function(Cost)
   end
 end)
 
--------------------------------- Shop ped Spawn Handles--------------------------------
-local shoppedspawn = 0
-RegisterServerEvent('hd_legendaries:pedspawns')
-AddEventHandler('hd_legendaries:pedspawns', function()
-  if shoppedspawn == 0 then
-    shoppedspawn = shoppedspawn + 1
-    TriggerClientEvent('hd_legendaries:pedspawn', source)
-  end
-end)
-
 ---------------------------------------- TESTING DATABASE --------------------------------------------------
 
 --------- This will create the hd_legendaries table on script launch if it does not already exist -----------------
