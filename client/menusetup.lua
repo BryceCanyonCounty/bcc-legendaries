@@ -11,18 +11,18 @@ local subtractamoount = 0 --Creates a variable used to store the amount to subtr
 
 ----------------------------------------- Menu Setup -----------------------------------------
 Citizen.CreateThread(function()
-    WarMenu.CreateMenu('hd_legendaries:leg', Config.Language.Menuname) --creates the main menu
+    WarMenu.CreateMenu('bcc:legendaries:leg', Config.Language.Menuname) --creates the main menu
     repeat --repeates until it ends/breaks
-        if WarMenu.IsMenuOpened('hd_legendaries:leg') then --if the menu is opened then
+        if WarMenu.IsMenuOpened('bcc:legendaries:leg') then --if the menu is opened then
             for k, v in pairs(Config.locations) do --opens the tables
                 Cost = v.hintcost
                 ------------------------- Setup of level system true menu -------------------------
                 if Config.LevelSystem == true then --if level system is true then
                     Cost = Cost - subtractamoount --Sets cost to = cost - subtractamoount
                     if WarMenu.Button(v.huntname .. ' Price to Hunt ' .. tostring(Cost) .. '$ ', '', Config.Language.Leveldisp .. ' ' .. tostring(level)) then --creates the spawnbutton(displays cost not v.hintcost to include the leveling system)
-                        TriggerServerEvent('hd_legendaries:menuopen5', Cost) --triggers the server cooldown event
-                        RegisterNetEvent('hd_legendaries:menuopen4') --creates a client event
-                        AddEventHandler('hd_legendaries:menuopen4', function() --adds a function to the client event
+                        TriggerServerEvent('bcc:legendaries:menuopen5', Cost) --triggers the server cooldown event
+                        RegisterNetEvent('bcc:legendaries:menuopen4') --creates a client event
+                        AddEventHandler('bcc:legendaries:menuopen4', function() --adds a function to the client event
                             Animal = v.pedmodel --sets varible to the config option to be used in the other .lua files
                             Animalcoords = v.coordinates
                             Npccoords = v.Npccoords
@@ -44,9 +44,9 @@ Citizen.CreateThread(function()
                     end
                 elseif Config.LevelSystem == false then
                     if WarMenu.Button(v.huntname .. ' Price to Hunt ' .. tostring(Cost) .. '$ ') then --creates the spawnbutton(displays cost not v.hintcost to include the leveling system)
-                        TriggerServerEvent('hd_legendaries:menuopen5', Cost) --triggers the server cooldown event
-                        RegisterNetEvent('hd_legendaries:menuopen4') --creates a client event
-                        AddEventHandler('hd_legendaries:menuopen4', function() --adds a function to the client event
+                        TriggerServerEvent('bcc:legendaries:menuopen5', Cost) --triggers the server cooldown event
+                        RegisterNetEvent('bcc:legendaries:menuopen4') --creates a client event
+                        AddEventHandler('bcc:legendaries:menuopen4', function() --adds a function to the client event
                             Animal = v.pedmodel --sets varible to the config option to be used in the other .lua files
                             Animalcoords = v.coordinates
                             Npccoords = v.Npccoords
@@ -75,8 +75,8 @@ Citizen.CreateThread(function()
 end)
 
 -------- Event to tell you cooldown is active ------------------------
-RegisterNetEvent('hd_legendaries:failmenuopen')
-AddEventHandler('hd_legendaries:failmenuopen', function()
+RegisterNetEvent('bcc:legendaries:failmenuopen')
+AddEventHandler('bcc:legendaries:failmenuopen', function()
     VORPcore.NotifyBottomRight(Config.Language.Cooldownactive, 4000)
 end)
 
@@ -88,21 +88,21 @@ Citizen.CreateThread(function()
         if GetDistanceBetweenCoords(l.shoplocation.x, l.shoplocation.y, l.shoplocation.z, GetEntityCoords(PlayerPedId()), false) < 2 then
             if IsControlJustReleased(0, 0x760A9C6F) then
                 if Config.LevelSystem == true then
-                    TriggerServerEvent('hd_legendaries:DBCheck') --triggers server event that makes sure you exist in the db
-                    Wait(100) --waits 150 ms gives server time to check
-                    TriggerServerEvent('hd_legendaries:GetTrustLevel') --triggers server event to get your level
-                    Wait(100) --Waits 100ms gives server time to run
+                    TriggerServerEvent('bcc:legendaries:DBCheck') --triggers server event that makes sure you exist in the db
+                    Wait(500) --waits 150 ms gives server time to check
+                    TriggerServerEvent('bcc:legendaries:GetTrustLevel') --triggers server event to get your level
+                    Wait(300) --Waits 100ms gives server time to run
                     levelcalc() --triggers level check function
                 end
-                WarMenu.OpenMenu('hd_legendaries:leg') --opens menu regardless of config
+                WarMenu.OpenMenu('bcc:legendaries:leg') --opens menu regardless of config
             end
         end
     end
 end)
 
 ------------------------ Level Catch Setup ---------------------------------
-RegisterNetEvent('hd_legendaries:ClientLevelCatch')
-AddEventHandler('hd_legendaries:ClientLevelCatch', function(trust) --Catches the trust variable from the server
+RegisterNetEvent('bcc:legendaries:ClientLevelCatch')
+AddEventHandler('bcc:legendaries:ClientLevelCatch', function(trust) --Catches the trust variable from the server
     level = trust --sets the variable to = trust
 end)
 

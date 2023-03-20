@@ -1,4 +1,4 @@
-# hd_legendaries
+# bcc-legendaries
 
 >This is a simple easily configurable Legendary Animal Hunting Script for RedM.
 
@@ -31,7 +31,8 @@
 
 ## Installation Steps
 - Add the file to your resource file
-- Add ensure 'hd_legendaries' to your resources.cfg
+- Add ensure 'bcc-legendaries' to your resources.cfg
+- Can not change name from 'bcc-legendaries' otherwise script will break
 
 ## Side notes
 - Credit to vorp_hunting that is where i pulled the skinned.js and skinned.lua from and modified it to do what I want here.
