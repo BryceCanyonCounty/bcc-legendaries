@@ -1,6 +1,6 @@
 # bcc-legendaries
 
->This is a simple easily configurable Legendary Animal Hunting Script for RedM.
+> This is a simple easily configurable Legendary Animal Hunting Script for RedM.
 
 ## Features
 - Menu for the hunts!
