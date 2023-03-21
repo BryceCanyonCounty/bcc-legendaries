@@ -7,11 +7,11 @@ end)
 
 --Animal spawn setup
 function spawnanimal()
-    local catch18 = false
+    local catch18 = false --acts as catch/trigger variable limits a section of code to only run once
     local catch17 = false --creates a kinda of catch/trigger varaible
     local deadcheck = false --creates a kind of catch/trigger variable
     local distancetracker = false --acts as a trigger of sorts
-    local createdped = 0 --sets varible to 0
+    local secondaryanimals = {} --creates a table for the secondary animals that will be spawned (this way if the config is set to spawn more than one, the delete ped native can delete all of them not just one of them)
     local model = GetHashKey(Animal) --sets the model to the varible ped to make set in the menu part of the code(Animal is a global set in menusetup.lua)
     local coords = Animalcoords -- pulls the global set in menusetup.lua
     RequestModel(model) --dont know but is needed
@@ -40,9 +40,9 @@ function spawnanimal()
                 if Secondarynpcboolean == true then
                     if catch18 == false then
                         for o, e in pairs(Secondarynpcspawn) do
-                            Createdped5 = CreatePed(Secondarynpcmodel, e.x, e.y, e.z, true, true, true, true)
-                            Citizen.InvokeNative(0x283978A15512B2FE, Createdped5, true) --This sets the ped into a random outift(fixes an invisiblity bug)
-                            Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, Createdped5) --sets the blip that tracks the ped
+                            secondaryanimals[o] = CreatePed(Secondarynpcmodel, e.x, e.y, e.z, true, true, true, true) --spawns the animals and will store them in the seconday animals table for later deletion if you die
+                            Citizen.InvokeNative(0x283978A15512B2FE, secondaryanimals[o], true) --This sets the ped into a random outift(fixes an invisiblity bug)
+                            Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, secondaryanimals[o]) --sets the blip that tracks the ped
                         end
                         catch18 = true
                     end
@@ -75,7 +75,12 @@ function spawnanimal()
                 RemoveBlip(blip)
             end
             Citizen.Wait(2000) --waits 2 seconds
-            DeletePed(createdped) --deletes ped
+            DeletePed(Createdped2) --deletes legendary animal
+            if Secondarynpcboolean == true then --if the config option is true then
+                for k, v in pairs(secondaryanimals) do --opens the table opp and runs this loop once per table entry (this is how we can delete multiple spawned peds)
+                    DeletePed(v) --deletes the ped
+                end
+            end
             VORPcore.NotifyBottomRight(Config.Language.Deadtext, 6000) break --prints you died and failed in bottom right and breaks loop
         end
     end
