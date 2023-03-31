@@ -18,7 +18,7 @@ Citizen.CreateThread(function()
                 Cost = v.hintcost
                 ------------------------- Setup of level system true menu -------------------------
                 if Config.LevelSystem == true then --if level system is true then
-                    if v.level >= level then
+                    if v.level <= level then
                     Cost = Cost - subtractamoount --Sets cost to = cost - subtractamoount
                     if WarMenu.Button(v.huntname .. ' Price to Hunt ' .. tostring(Cost) .. '$ ', '', Config.Language.Leveldisp .. ' ' .. tostring(level)) then --creates the spawnbutton(displays cost not v.hintcost to include the leveling system)
                         TriggerServerEvent('bcc:legendaries:menuopen5', Cost) --triggers the server cooldown event
