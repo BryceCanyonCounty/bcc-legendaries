@@ -31,6 +31,7 @@ Config.Levels = {
 Config.locations = {
     { --gator setup
         hintcost = 50,
+        level = 0,
         Leganimalhealth = 500, -- sets the legendary animals health amount max is 1000 I believe
         investigationspot = {x = 1718.58, y = -1001.05, z = 41.84}, --this is where the first chest will spawn
         huntname = 'Legendary Gator', --the name of the hunt in the menu
@@ -65,6 +66,7 @@ Config.locations = {
     {
         --bear setup
         hintcost = 50,
+        level = 1,
         Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = 1197.62, y = 2034.54, z = 322.93},
         huntname = 'Legendary Bear',
@@ -97,6 +99,7 @@ Config.locations = {
     {
         --wolf setup
         hintcost = 50,
+        level = 2,
         Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = -1726.5, y = -87.84, z = 181.28},
         huntname = 'Legendary Wolf',
@@ -129,6 +132,7 @@ Config.locations = {
     {
         --boar setup
         hintcost = 50,
+        level = 3,
         Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = 757.77, y = -842.5, z = 55.24},
         huntname = "Legendary Boar",
@@ -161,6 +165,7 @@ Config.locations = {
     {
         --fox
         hintcost = 70,
+        level = 4,
         Leganimalhealth = 500, --max is 1000 I believe
         investigationspot = {x = 1470.33, y = -1723.61, z = 61.85},
         huntname = "Legendary Fox",
