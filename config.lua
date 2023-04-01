@@ -3,7 +3,7 @@ Config = {}
 Config.shop = {
     shoplocation = {
         name = "Saint Denis",
-        Pos = { x = 1704.63, y = 1489.88, z = 146.52 },
+        Pos = {x = 1877.96, y = -1344.97, z = 42.49},
     },
     shoplocation2 = {
         name = "Blackwater",
