@@ -11,7 +11,7 @@ Config.shop = {
     }
 }
 
-GlobalHuntCooldown = 15000 --this is how long before the hunter will allow you to do another hunt this is server sided so once someone does it everyone has to wait until this timer is over to do another hunt
+GlobalHuntCooldown = 7200000 --this is how long before the hunter will allow you to do another hunt this is server sided so once someone does it everyone has to wait until this timer is over to do another hunt
 
 -------------------------- Level System Setup ------------------------------------
 Config.LevelSystem = true       --Set this true to use the level system, false will disable it
