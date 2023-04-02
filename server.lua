@@ -12,13 +12,19 @@ AddEventHandler('bcc:legendaries:giveitemsbear', function(Rewards)
   for k, v in pairs(Rewards) do
     VorpInv.addItem(source, v.name, v.count)
   end
-  if Config.LevelSystem == true then --if config level system set true then
-    local Character = VORPcore.getUser(source).getUsedCharacter --checks the char used
-    local charidentifier = Character.charIdentifier --This is the static id of your character
-    local levelin = Config.LevelIncreaseperHunt --Sets the variable to the config amount
-    local identifier = Character.identifier --steam id
-    local param = { ['charidentifier'] = charidentifier, ['identifier'] = identifier, ['levelin'] = levelin } --sets params for exmysql
-    exports.oxmysql:execute('UPDATE legendaries SET `trust`=trust+@levelin WHERE charidentifier=@charidentifier AND identifier=@identifier', param) --Adds plus 1 to trust, in the table where the char id and id match the players char id and id
+  if Config.LevelSystem == true then                                                                        --if config level system set true then
+    local Character = VORPcore.getUser(source)
+        .getUsedCharacter                                                                                   --checks the char used
+    local charidentifier = Character
+        .charIdentifier                                                                                     --This is the static id of your character
+    local levelin = Config
+        .LevelIncreaseperHunt                                                                               --Sets the variable to the config amount
+    local identifier = Character
+        .identifier                                                                                         --steam id
+    local param = { ['charidentifier'] = charidentifier,['identifier'] = identifier,['levelin'] = levelin } --sets params for exmysql
+    exports.oxmysql:execute(
+      'UPDATE legendaries SET `trust`=trust+@levelin WHERE charidentifier=@charidentifier AND identifier=@identifier',
+      param) --Adds plus 1 to trust, in the table where the char id and id match the players char id and id
   end
   VORPcore.NotifyBottomRight(source, Config.Language.AnimalSkinned, 4000)
 end)
@@ -60,17 +66,21 @@ RegisterServerEvent('bcc:legendaries:DBCheck')
 AddEventHandler('bcc:legendaries:DBCheck', function()
   local _source = source
   local Character = VORPcore.getUser(_source).getUsedCharacter --checks the char used
-  local charidentifier = Character.charIdentifier --This is the static id of your character
-  local identifier = Character.identifier --steam id
-  local param = { ['charidentifier'] = charidentifier, ['identifier'] = identifier }
+  local charidentifier = Character.charIdentifier              --This is the static id of your character
+  local identifier = Character.identifier                      --steam id
+  local param = { ['charidentifier'] = charidentifier,['identifier'] = identifier }
   --------The if you exist in db code was pulled from vorp_banking and modified ----------------
-  exports.oxmysql:execute("SELECT identifier, charidentifier FROM legendaries WHERE identifier = @Playeridentifier AND charidentifier = @CharIdentifier", { ["@Playeridentifier"] = identifier, ["CharIdentifier"] = charidentifier }, function(result) --Checks if you exist in the database
-    if result[1] then --This will run if your char id or player id is in the db already
-      --Player already exists do nothing
-    else --this will run if you do not exist in the db(adds your char id and player id to the database)
-      exports.oxmysql:execute("INSERT INTO legendaries ( `charidentifier`,`identifier` ) VALUES ( @charidentifier,@identifier )", param) --If player is not in db this will create him in the db
-    end
-  end)
+  exports.oxmysql:execute(
+    "SELECT identifier, charidentifier FROM legendaries WHERE identifier = @Playeridentifier AND charidentifier = @CharIdentifier",
+    { ["@Playeridentifier"] = identifier,["CharIdentifier"] = charidentifier },
+    function(result)                                                                                                 --Checks if you exist in the database
+      if result[1] then                                                                                              --This will run if your char id or player id is in the db already
+        --Player already exists do nothing
+      else                                                                                                           --this will run if you do not exist in the db(adds your char id and player id to the database)
+        exports.oxmysql:execute(
+          "INSERT INTO legendaries ( `charidentifier`,`identifier` ) VALUES ( @charidentifier,@identifier )", param) --If player is not in db this will create him in the db
+      end
+    end)
 end)
 
 ------------------This will output your level inside the trust variable --------------------------------------------
@@ -78,11 +88,14 @@ RegisterServerEvent('bcc:legendaries:GetTrustLevel')
 AddEventHandler('bcc:legendaries:GetTrustLevel', function()
   local _source = source
   local Character = VORPcore.getUser(_source).getUsedCharacter --checks the char used
-  local charidentifier = Character.charIdentifier --This is the static id of your character
-  local identifier = Character.identifier --steam id
-  local param = { ['charidentifier'] = charidentifier, ['identifier'] = identifier }
-  exports.oxmysql:execute("SELECT trust FROM legendaries WHERE charidentifier=@charidentifier AND identifier=@identifier", param, function(result)
-    local trust = result[1].trust --This is the trust variable from the database
-    TriggerClientEvent('bcc:legendaries:ClientLevelCatch', _source, trust) --passes trust to client
-  end)
+  local charidentifier = Character.charIdentifier              --This is the static id of your character
+  local identifier = Character.identifier                      --steam id
+  local param = { ['charidentifier'] = charidentifier,['identifier'] = identifier }
+  exports.oxmysql:execute(
+    "SELECT trust FROM legendaries WHERE charidentifier=@charidentifier AND identifier=@identifier", param,
+    function(result)
+      local trust = result[1]
+          .trust                                                             --This is the trust variable from the database
+      TriggerClientEvent('bcc:legendaries:ClientLevelCatch', _source, trust) --passes trust to client
+    end)
 end)
