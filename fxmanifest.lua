@@ -26,6 +26,6 @@ client_scripts {
     '/client/skinned.lua',
 }
 
-version '1.0.0'
+version '1.1.0'
 
 dependency 'vorp_core'
