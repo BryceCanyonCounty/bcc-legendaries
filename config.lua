@@ -2,10 +2,12 @@ Config = {}
 
 Config.shop = {
     shoplocation = {
+        allowblip = true,
         name = "Saint Denis",
         Pos = {x = 1877.96, y = -1344.97, z = 42.49},
     },
     shoplocation2 = {
+        allowblip = false,
         name = "Blackwater",
         Pos = { x = 1710.63, y = 1489.88, z = 146.52 },
     }
