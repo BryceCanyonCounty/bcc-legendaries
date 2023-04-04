@@ -8,83 +8,103 @@ end)
 StopAll = false           --This is the variable used for the dead check
 local level = 0           --Creates a variable to store the players level client side(sets to 0 when you join server)
 local subtractamoount = 0 --Creates a variable used to store the amount to subtract off cost based on your level if config.level is true
-local huntlocation
 ----------------------------------------- Menu Setup -----------------------------------------
+TriggerEvent("menuapi:getData", function(call)
+    MenuData = call
+end)
+
+--This closes the menu when you stop or restart the resources.
+AddEventHandler("onResourceStop", function(resourceName)
+    if resourceName ~= GetCurrentResourceName() then
+        return
+    end
+    MenuData.CloseAll()
+end)
+
+--this is used to close the menu while you are on the main menu and hit backspace button
+RegisterNetEvent('bcc-legendaries:MenuClose')
+AddEventHandler('bcc-legendaries:MenuClose', function()
+    while true do --loops will run permantely
+        Citizen.Wait(10) --waits 10ms prevents crashing
+        if IsControlJustReleased(0, 0x156F7119) then --if backspace is pressed then
+            MenuData.CloseAll() --closes all menus
+        end
+    end
+end)
+
+local huntlocation
 RegisterNetEvent('bcc:legendaries:openmenu')
 AddEventHandler('bcc:legendaries:openmenu', function(location)
-    huntlocation = location                                             -- sets
-    WarMenu.CreateMenu('bcc:legendaries:leg', Config.Language.Menuname) --creates the main menu
-    repeat                                                              --repeates until it ends/breaks
-        if WarMenu.IsMenuOpened('bcc:legendaries:leg') then             --if the menu is opened then
-            for k, v in pairs(Config.locations) do                      --opens the tables
-                Cost = v.hintcost
-                ------------------------- Setup of level system true menu -------------------------
-                if Config.LevelSystem == true then
-                    if v.level <= level then
-                        if v.location == huntlocation then                                                                                                             --if level system is true then
-                            Cost = Cost -
-                                subtractamoount                                                                                                                        --Sets cost to = cost - subtractamoount
-                            if WarMenu.Button(v.huntname .. ' Price to Hunt ' .. tostring(Cost) .. '$ ', '', Config.Language.Leveldisp .. ' ' .. tostring(level)) then --creates the spawnbutton(displays cost not v.hintcost to include the leveling system)
-                                TriggerServerEvent('bcc:legendaries:menuopen5', Cost)                                                                                  --triggers the server cooldown event
-                                RegisterNetEvent('bcc:legendaries:menuopen4')                                                                                          --creates a client event
-                                AddEventHandler('bcc:legendaries:menuopen4',
-                                    function()                                                                                                                         --adds a function to the client event
-                                        Animal = v
-                                            .pedmodel                                                                                                                  --sets varible to the config option to be used in the other .lua files
-                                        Animalcoords = v.coordinates
-                                        Npccoords = v.Npccoords
-                                        Npcblipcoords = v.npcblipcoord
-                                        Npcchest = v.npcschest
-                                        Investigate = v.investigationspot
-                                        Thuntname = v.huntname
-                                        Npcspawnyn = v.enemynpc
-                                        Rewards = v.GivenItems
-                                        Health = v.Leganimalhealth
-                                        Secondarynpcspawn = v.SecondaryAnimals.Animalspawns
-                                        Secondarynpcboolean = v.SecondaryAnimals.secondaryanimals
-                                        Secondarynpcmodel = v.SecondaryAnimals.animalmodel
-                                        VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) --text in bottom right
-                                        offcatcher()                                                      --triggers offcatcher
-                                        searchsetup1()                                                    --triggers the search setup
-                                        WarMenu.CloseMenu()                                               --closes the menu
-                                    end)
-                                break
-                            end
-                        end
-                    end
-                elseif Config.LevelSystem == false then
-                    if WarMenu.Button(v.huntname .. ' Price to Hunt ' .. tostring(Cost) .. '$ ') then --creates the spawnbutton(displays cost not v.hintcost to include the leveling system)
-                        TriggerServerEvent('bcc:legendaries:menuopen5', Cost)                         --triggers the server cooldown event
-                        RegisterNetEvent('bcc:legendaries:menuopen4')                                 --creates a client event
-                        AddEventHandler('bcc:legendaries:menuopen4',
-                            function()                                                                --adds a function to the client event
-                                Animal = v
-                                    .pedmodel                                                         --sets varible to the config option to be used in the other .lua files
-                                Animalcoords = v.coordinates
-                                Npccoords = v.Npccoords
-                                Npcblipcoords = v.npcblipcoord
-                                Npcchest = v.npcschest
-                                Investigate = v.investigationspot
-                                Thuntname = v.huntname
-                                Npcspawnyn = v.enemynpc
-                                Rewards = v.GivenItems
-                                Health = v.Leganimalhealth
-                                Secondarynpcspawn = v.SecondaryAnimals.Animalspawns
-                                Secondarynpcboolean = v.SecondaryAnimals.secondaryanimals
-                                Secondarynpcmodel = v.SecondaryAnimals.animalmodel
-                                VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 6000) --text in bottom right
-                                offcatcher()                                                      --triggers offcatcher
-                                searchsetup1()                                                    --triggers the search setup
-                                WarMenu.CloseMenu()                                               --closes the menu
-                            end)
-                        break
-                    end
+    huntlocation = location
+    local elements = {} --sets the var to a table
+    local elementindex = 1 --sets the var too 1
+    Citizen.Wait(100) --waits 100ms
+    TriggerEvent('bcc-legendaries:MenuClose') --triggers the event
+    MenuData.CloseAll() --closes all menus
+    for k, items in pairs(Config.locations) do --opens a for loop
+        if items.location == huntlocation then
+            if Config.LevelSystem then
+                if items.level <= level then
+                    Cost = items.hintcost - subtractamoount
+                    elements[elementindex] = { --sets the elemnents to this table
+                    label = items.huntname .. ' ' .. Cost .. '$', --sets the label
+                    value = 'buyhint' .. tostring(elementindex), --sets the value
+                    desc = '', --empty desc
+                    info = items --sets info to the table(this will allow you too open the table in the menu setup below)
+                    }
+                    elementindex = elementindex + 1 --adds 1 to the var
                 end
+            else
+                Cost = items.hintcost
+                elements[elementindex] = { --sets the elemnents to this table
+                    label = items.huntname .. ' ' .. Cost .. '$', --sets the label
+                    value = 'buyhint' .. tostring(elementindex), --sets the value
+                    desc = '', --empty desc
+                    info = items --sets info to the table(this will allow you too open the table in the menu setup below)
+                }
+                elementindex = elementindex + 1 --adds 1 to the var
             end
         end
-        WarMenu.Display()
-        Citizen.Wait(0)
-    until false
+    end
+    MenuData.Open('default', GetCurrentResourceName(), 'menuapi', {
+        title = Config.Language.Menuname,
+        align = 'top-left',
+        elements = elements,
+        lastmenu = "MainMenu"
+    },
+        function(data)
+            if (data.current == "backup") then
+                _G[data.trigger]()
+            else
+                if Config.LevelSystem == true then
+                    if data.current.info.level <= level then
+                        Cost = data.current.info.hintcost - subtractamoount
+                    end
+                else
+                    Cost = data.current.info.hintcost
+                end
+                TriggerServerEvent('bcc:legendaries:menuopen5', Cost)                                                                                  --triggers the server cooldown event
+                RegisterNetEvent('bcc:legendaries:menuopen4')                                                                                          --creates a client event
+                AddEventHandler('bcc:legendaries:menuopen4', function()                                                                                                                         --adds a function to the client event
+                    Animal = data.current.info.pedmodel                                                                                                                  --sets varible to the config option to be used in the other .lua files
+                    Animalcoords = data.current.info.coordinates
+                    Npccoords = data.current.info.Npccoords
+                    Npcblipcoords = data.current.info.npcblipcoord
+                    Npcchest = data.current.info.npcschest
+                    Investigate = data.current.info.investigationspot
+                    Thuntname = data.current.info.huntname
+                    Npcspawnyn = data.current.info.enemynpc
+                    Rewards = data.current.info.GivenItems
+                    Health = data.current.info.Leganimalhealth
+                    Secondarynpcspawn = data.current.info.SecondaryAnimals.Animalspawns
+                    Secondarynpcboolean = data.current.info.SecondaryAnimals.secondaryanimals
+                    Secondarynpcmodel = data.current.info.SecondaryAnimals.animalmodel
+                    VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) --text in bottom right
+                    offcatcher()                                                      --triggers offcatcher
+                    searchsetup1()                                                    --triggers the search setup
+                end)
+            end
+        end)
 end)
 
 -------- Event to tell you cooldown is active ------------------------
@@ -108,7 +128,6 @@ Citizen.CreateThread(function()
                         levelcalc()                                         --triggers level check function
                     end
                     TriggerEvent('bcc:legendaries:openmenu', v.name)        --Trigger Menu Event with location name
-                    WarMenu.OpenMenu('bcc:legendaries:leg')                 --opens menu regardless of config
                 end
             end
         end
