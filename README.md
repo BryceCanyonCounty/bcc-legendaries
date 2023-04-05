@@ -27,6 +27,7 @@
 ## Requirements
 - VORP Core
 - VORP Utils
+- Menu Api
 - VORP Inventory
 
 ## Installation Steps
