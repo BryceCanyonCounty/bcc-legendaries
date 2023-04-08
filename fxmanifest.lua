@@ -3,6 +3,7 @@ games {"rdr3"}
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
 
 lua54 'yes'
+author 'Jake2k4'
 
 server_scripts {
     'server.lua',
@@ -27,4 +28,10 @@ client_scripts {
 
 version '1.1.1'
 
-dependency 'vorp_core'
+dependency {
+    'vorp_core',
+    'vorp_inventory',
+    'vorp_utils',
+    'bcc-versioner',
+    'menuapi'
+}

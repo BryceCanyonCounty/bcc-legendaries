@@ -101,7 +101,7 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                     Secondarynpcmodel = data.current.info.SecondaryAnimals.animalmodel
                     VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) --text in bottom right
                     offcatcher()                                                      --triggers offcatcher
-                    searchsetup1()                                                    --triggers the search setup
+                    searchsetupmain('InitSearch', Investigate.x, Investigate.y, Investigate.z)       --triggers the search setup
                 end)
             end
         end)

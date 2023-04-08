@@ -99,3 +99,8 @@ AddEventHandler('bcc:legendaries:GetTrustLevel', function()
       TriggerClientEvent('bcc:legendaries:ClientLevelCatch', _source, trust) --passes trust to client
     end)
 end)
+
+--This will handle version checking
+local versioner = exports['bcc-versioner'].initiate()
+local repo = 'https://github.com/BryceCanyonCounty/bcc-legendaries'
+versioner.checkRelease(GetCurrentResourceName(), repo)
