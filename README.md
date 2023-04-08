@@ -13,6 +13,7 @@
 - Everything is easily configurable in the Config.lua!
 - Leveling system! (optional can be enabled or disabled via config.lua)
 - Leveling system allows you to create an infinite number of levels, and at intervals you set will decrease the hint price by an amount you set (all done through config.lua)
+- Version check system to help you keep up to date on new features and bug fixes!
 
 ## How it works
 - You can set up the hunter(the location you go to start hunts) coordinates in the Config.lua and when you go there you will find an npc and some text. Do what the text says to open the hunt menu.
@@ -29,6 +30,7 @@
 - VORP Utils
 - Menu Api
 - VORP Inventory
+- bcc-versioner
 
 ## Installation Steps
 - Add the file to your resource file
