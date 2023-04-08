@@ -1,90 +1,78 @@
---Pulls Vorp Core
+--Pulling Essentials
 local VORPcore = {}
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
---end pulling it
+local VORPutils = {}
+TriggerEvent("getUtils", function(utils)
+    VORPutils = utils
+end)
+
 
 --Animal spawn setup
 function spawnanimal()
-    local catch18 = false            --acts as catch/trigger variable limits a section of code to only run once
-    local catch17 = false            --creates a kinda of catch/trigger varaible
-    local deadcheck = false          --creates a kind of catch/trigger variable
-    local distancetracker = false    --acts as a trigger of sorts
+    --Variables Setup
     local secondaryanimals = {}      --creates a table for the secondary animals that will be spawned (this way if the config is set to spawn more than one, the delete ped native can delete all of them not just one of them)
     local model = GetHashKey(Animal) --sets the model to the varible ped to make set in the menu part of the code(Animal is a global set in menusetup.lua)
     local coords = Animalcoords      -- pulls the global set in menusetup.lua
-    RequestModel(model)              --dont know but is needed
-    if not HasModelLoaded(model) then
-        RequestModel(model)
+
+    --Loading Model Setup
+    RequestModel(model) --requests the model
+    if not HasModelLoaded(model) then --if it has not loaded then
+        RequestModel(model) --request model
     end
-    while not HasModelLoaded(model) or HasModelLoaded(model) == 0 or model == 1 do
-        Citizen.Wait(1)
-    end                    --end dont know but is needed
-    distancetracker = true --sets the trigger to true so it allows the while loop to work
-    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0)
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip)
-    --Waypointsetup
-    local ul = GetEntityCoords(PlayerPedId())                                                       --gets players location(not needed if alreadysetup)
-    StartGpsMultiRoute(6, true, true)                                                               --sets the color and tells it to waypoint on foot and in vehicle
-    AddPointToGpsMultiRoute(ul.x, ul.y, ul.z)                                                       --playerscoords
-    AddPointToGpsMultiRoute(coords.x, coords.y, coords.z)                                           --Where the waypoint is set too
-    SetGpsMultiRouteRender(true)                                                                    --sets the waypoint to active
-    --end waypoint setup
-    while distancetracker == true do                                                                --starts a loop
-        Citizen.Wait(0)                                                                             --waits a little(prevents crashing)
-        if StopAll == false then                                                                    --if the varible from menusetup lua is false then
-            local pl = GetEntityCoords(PlayerPedId())                                               --gets the players coords without multiple varibles for optimization
-            Dist9 = GetDistanceBetweenCoords(pl.x, pl.y, pl.z, coords.x, coords.y, coords.z, false) --gets distance between player and animal spawn
-            if Dist9 < 40 then                                                                      --if distance is less than then
-                if Secondarynpcboolean == true then
-                    if catch18 == false then
-                        for o, e in pairs(Secondarynpcspawn) do
-                            secondaryanimals[o] = CreatePed(Secondarynpcmodel, e.x, e.y, e.z, true, true, true, true) --spawns the animals and will store them in the seconday animals table for later deletion if you die
-                            Citizen.InvokeNative(0x283978A15512B2FE, secondaryanimals[o], true)                       --This sets the ped into a random outift(fixes an invisiblity bug)
-                            Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, secondaryanimals[o])                  --sets the blip that tracks the ped
-                        end
-                        catch18 = true
-                    end
-                end
-                if catch17 == false then                                                                 --if catch17 is false then
-                    catch17 = true                                                                       --sets it to true to prevent the code below from running again since this is in a loop
-                    ClearGpsMultiRoute()                                                                 --deletes the waypoint
-                    RemoveBlip(blip)
-                    Createdped2 = CreatePed(model, coords.x, coords.y, coords.z, true, true, true, true) --creates the ped
-                    Citizen.InvokeNative(0x283978A15512B2FE, Createdped2, true)                          --This sets the ped into a random outift(fixes an invisiblity bug)
-                    Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, Createdped2)                     --sets the blip that tracks the ped
-                    VORPcore.NotifyRightTip(Config.Language.LegAnimalSpawned, 4000)
-                    SetEntityHealth(Createdped2, Health, 0)                                              --changes the entity health to a higher amount
-                    Citizen.CreateThread(function()
-                        deadcheck = true                                                                 --sets deadcheck to true
-                        while deadcheck == true do                                                       --creates a loop
-                            local dead = IsEntityDead(Createdped2)                                       --checks if the ped is dead
-                            Citizen.Wait(0)                                                              --prevents crashing
-                            if dead == 1 then                                                            --if it is dead then
-                                skinnedped()                                                             --trigger the skin ped event
-                                break                                                                    --breaks loop to save rss
-                            end
-                        end
-                    end)
-                end
-            end
-        elseif StopAll == true then  --else if it is true(player dead) then
-            if Dist9 > 40 then       --if distance is greater than 50 then
-                ClearGpsMultiRoute() --clears waypoint
-                RemoveBlip(blip)
-            end
-            Citizen.Wait(2000)                         --waits 2 seconds
-            DeletePed(Createdped2)                     --deletes legendary animal
-            if Secondarynpcboolean == true then        --if the config option is true then
-                for k, v in pairs(secondaryanimals) do --opens the table opp and runs this loop once per table entry (this is how we can delete multiple spawned peds)
-                    DeletePed(v)                       --deletes the ped
-                end
-            end
-            VORPcore.NotifyRightTip(Config.Language.Deadtext, 6000)
-            break --prints you died and failed in bottom right and breaks loop
+    while not HasModelLoaded(model) or HasModelLoaded(model) == 0 or model == 1 do --if it hasnt loaded wait 1 ms
+        Citizen.Wait(1) --waits 1 ms
+    end
+    
+    --Blip and Waypoint Setup
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0) --creates a blip with the yellow circle around it
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip) --names blip
+    VORPutils.Gps:SetGps(coords.x, coords.y, coords.z) --Creates the gps waypoint
+
+    --Dist Tracker Setup
+    while true do --while loop wont stop until broken
+        Citizen.Wait(100) --waits 100ms prevents crashing
+        if StopAll then break end --if dead then break loop
+        local pl = GetEntityCoords(PlayerPedId()) --gets players coords
+        if GetDistanceBetweenCoords(pl.x, pl.y, pl.z, coords.x, coords.y, coords.z, true) < 40 then break end --if distance is less than 40 break loop
+    end
+    if StopAll then -- if true then
+        RemoveBlip(blip) --removes blip
+        VORPutils.Gps:RemoveGps() --Removes the gps waypoint
+        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return --prints on screen and returns ending the function here not allowing more code to run
+    end
+    RemoveBlip(blip) --deletes blip
+    VORPutils.Gps:RemoveGps() --removes gps
+
+    --Animal Spawning Setup
+    if Secondarynpcboolean then
+        for o, e in pairs(Secondarynpcspawn) do
+            secondaryanimals[o] = CreatePed(Secondarynpcmodel, e.x, e.y, e.z, true, true, true, true) --spawns the animals and will store them in the seconday animals table for later deletion if you die
+            Citizen.InvokeNative(0x283978A15512B2FE, secondaryanimals[o], true)                       --This sets the ped into a random outift(fixes an invisiblity bug)
+            Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, secondaryanimals[o])                  --sets the blip that tracks the ped
         end
     end
+    Createdped2 = CreatePed(model, coords.x, coords.y, coords.z, true, true, true, true) --creates the ped
+    Citizen.InvokeNative(0x283978A15512B2FE, Createdped2, true)      --This sets the ped into a random outift(fixes an invisiblity bug)
+    Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, Createdped2)      --sets the blip that tracks the ped
+    VORPcore.NotifyRightTip(Config.Language.LegAnimalSpawned, 4000) --prints on screen
+    SetEntityHealth(Createdped2, Health, 0) --changes the entity health to the set variable from config
+    --Deadchecking
+    while true do --while loop wont stop until broken
+        Citizen.Wait(100) --waits 100ms preventing crashing
+        if StopAll then break end --if var true then break loop
+        if IsEntityDead(Createdped2) == 1 then --if entity is dead then
+            skinnedped() break --trigger function and break loop
+        end
+    end
+    if StopAll then --if var true then
+        if Secondarynpcboolean then --if var true then
+            for e, u in pairs(secondaryanimals) do --for loop in the secondaryanimals table
+                DeletePed(u) --deletes ped (this for loop deletes all peds that were created)
+            end
+        end
+        DeletePed(Createdped2) --deletes the main ped(legendary animal)
+        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return --prints on screen and returns ending the function here
+    end
 end
-
---End animal spawn setup
