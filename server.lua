@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
       `identifier` varchar(50) NOT NULL, /*Creates a tab in the table for ident*/
       `charidentifier` int(11) NOT NULL,
       `trust` int(100) NOT NULL DEFAULT 0,
-      UNIQUE KEY `identifier` (`identifier`))
+      UNIQUE KEY `charidentifier` (`charidentifier`))
     ]])
   end
 end)
