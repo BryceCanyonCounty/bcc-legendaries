@@ -1,13 +1,3 @@
---Pulling Essentials
-local VORPutils = {}
-TriggerEvent("getUtils", function(utils)
-    VORPutils = utils
-end)
-local VORPcore = {}
-TriggerEvent("getCore", function(core)
-    VORPcore = core
-end)
-
 --Creates the search chest function that is used twice in the script
 function searchsetupmain(type, x, y, z) --function catches these variables from where ever it is called
     --Spawning Object Setup
