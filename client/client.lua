@@ -1,14 +1,3 @@
---Pulling Essentials
-local VORPcore = {}
-TriggerEvent("getCore", function(core)
-    VORPcore = core
-end)
-local VORPutils = {}
-TriggerEvent("getUtils", function(utils)
-    VORPutils = utils
-end)
-
-
 --Animal spawn setup
 function spawnanimal()
     --Variables Setup
@@ -16,14 +5,7 @@ function spawnanimal()
     local model = GetHashKey(Animal) --sets the model to the varible ped to make set in the menu part of the code(Animal is a global set in menusetup.lua)
     local coords = Animalcoords      -- pulls the global set in menusetup.lua
 
-    --Loading Model Setup
-    RequestModel(model) --requests the model
-    if not HasModelLoaded(model) then --if it has not loaded then
-        RequestModel(model) --request model
-    end
-    while not HasModelLoaded(model) or HasModelLoaded(model) == 0 or model == 1 do --if it hasnt loaded wait 1 ms
-        Citizen.Wait(1) --waits 1 ms
-    end
+    modelload(model)
     
     --Blip and Waypoint Setup
     local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0) --creates a blip with the yellow circle around it
@@ -31,12 +13,7 @@ function spawnanimal()
     VORPutils.Gps:SetGps(coords.x, coords.y, coords.z) --Creates the gps waypoint
 
     --Dist Tracker Setup
-    while true do --while loop wont stop until broken
-        Citizen.Wait(100) --waits 100ms prevents crashing
-        if StopAll then break end --if dead then break loop
-        local pl = GetEntityCoords(PlayerPedId()) --gets players coords
-        if GetDistanceBetweenCoords(pl.x, pl.y, pl.z, coords.x, coords.y, coords.z, true) < 40 then break end --if distance is less than 40 break loop
-    end
+    distcheck(coords.x, coords.y, coords.z, 40, PlayerPedId())
     if StopAll then -- if true then
         RemoveBlip(blip) --removes blip
         VORPutils.Gps:RemoveGps() --Removes the gps waypoint

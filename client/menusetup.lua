@@ -1,9 +1,3 @@
-------------------------------- Pulling Essentials -----------------------------------
-local VORPcore = {}
-TriggerEvent("getCore", function(core)
-    VORPcore = core
-end)
-
 ------------------- Variables ------------------------------------
 StopAll = false           --This is the variable used for the dead check
 local level = 0           --Creates a variable to store the players level client side(sets to 0 when you join server)

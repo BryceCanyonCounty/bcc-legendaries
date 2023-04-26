@@ -17,6 +17,7 @@ shared_scripts {
 
 
 client_scripts {
+    '/client/functions.lua',
     '/client/client.lua',
     '/client/npcspawn.lua',
     '/client/shopped.lua',
