@@ -1,22 +1,52 @@
-local npc = {}
-local x, y, z = {}, {}, {}
+local npcs = {}
+local blips = {}
+
 Citizen.CreateThread(function()
     Citizen.Wait(1000)
 
     for k, v in pairs(Config.shop) do
-        local model = GetHashKey('mp_re_slumpedhunter_males_01') --sets the npc model
+        local model = GetHashKey('mp_re_slumpedhunter_males_01') -- sets the npc model
         modelload(model)
 
-        npc = CreatePed(model, v.Pos.x, v.Pos.y, v.Pos.z - 1.0, v.Pos.h, false, false, true, true)
+        local npc = CreatePed(model, v.Pos.x, v.Pos.y, v.Pos.z - 1.0, v.Pos.h, false, false, true, true)
         Citizen.InvokeNative(0x283978A15512B2FE, npc, true)
         SetEntityCanBeDamaged(npc, false)
         SetEntityInvincible(npc, true)
         FreezeEntityPosition(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
-        x, y, z = v.Pos.x, v.Pos.y, v.Pos.z
+        
         if v.allowblip then
-            local blip = VORPutils.Blips:SetBlip(Config.Language.Hunterblip, 'blip_taxidermist', 0.8, x, y, z)
+            local blip = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, v.Pos.x, v.Pos.y, v.Pos.z) -- This create a blip with a defualt blip hash we given
+            SetBlipSprite(blip, v.BlipHash, 1) -- This sets the blip hash to the given in config.
+            SetBlipScale(blip, 0.8)
+            Citizen.InvokeNative(0x662D364ABF16DE2F, blip, joaat(v.BlipColor))
+            Citizen.InvokeNative(0x9CB1A1623062F402, blip, v.BlipName) -- Sets the blip Name
+            table.insert(blips, blip)
         end
+
+        table.insert(npcs, npc) -- Store the NPC in the npcs table
+    end
+end)
+
+-- Function to delete NPCs
+function DeleteNPCs()
+    for k, v in pairs(npcs) do
+        DeletePed(v)
+    end
+end
+
+-- Function to delete blips
+function DeleteBlips()
+    for k, v in pairs(blips) do
+        RemoveBlip(v)
+    end
+end
+
+-- Call the DeleteNPCs function when the resource stops
+AddEventHandler("onResourceStop", function(resource)
+    if resource == GetCurrentResourceName() then
+        DeleteNPCs()
+        DeleteBlips()
     end
 end)
 
@@ -29,7 +59,7 @@ Citizen.CreateThread(function()
         for k, v in pairs(Config.shop) do
             if GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 2.5 then
                 sleep = false
-                DrawText3D(v.Pos.x, v.Pos.y, v.Pos.z, Config.Language.Shoptext) --creates the text
+                DrawText3D(v.Pos.x, v.Pos.y, v.Pos.z, Config.Language.Shoptext) -- creates the text
             end
         end
         if sleep then
@@ -37,3 +67,5 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+
