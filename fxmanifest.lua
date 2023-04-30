@@ -11,8 +11,6 @@ server_scripts {
 
 shared_scripts {
     'config.lua',
-    'locale.lua',
-    'languages/*.lua',
 }
 
 
@@ -33,6 +31,6 @@ dependency {
     'vorp_core',
     'vorp_inventory',
     'vorp_utils',
-    'bcc-versioner',
+    'bcc-utils',
     'menuapi'
 }

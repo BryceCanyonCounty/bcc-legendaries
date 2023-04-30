@@ -1,5 +1,7 @@
 Config = {}
 
+Config.WebhookLink = '' --insert your webhook link here if you want webhooks
+
 Config.shop = {
     shoplocation = {
         allowblip = true,
@@ -18,8 +20,6 @@ Config.shop = {
         BlipColor = "BLIP_MODIFIER_MP_COLOR_10",
     }
 }
-
-GlobalHuntCooldown = 7200000 --this is how long before the hunter will allow you to do another hunt this is server sided so once someone does it everyone has to wait until this timer is over to do another hunt
 
 -------------------------- Level System Setup ------------------------------------
 Config.LevelSystem = true       --Set this true to use the level system, false will disable it
@@ -51,10 +51,11 @@ Config.locations = {
         level = 1,                                                    -- level of trust needed
         Leganimalhealth = 500,                                        -- sets the legendary animals health amount max is 1000 I believe
         investigationspot = { x = 1718.58, y = -1001.05, z = 41.84 }, --this is where the first chest will spawn
-        huntname = 'Legendary Gator',                                 --the name of the hunt in the menu
+        huntname = 'Legendary Gator',                                 --the name of the hunt in the menu(make sure these are unique no duplicates otherwise code will break)
         enemynpc = true,                                              --if you want to fight enemy npcs or not
         coordinates = { x = 2002.28, y = -1758.61, z = 41.03 },       --this is where the animal will spawn
         pedmodel = 'A_C_Alligator_02',                                -- Ped model of the animal
+        CooldownTime = 30000,                                        -- Time in ms that will have to pass before anyone can hunt this animal again
         GivenItems = {                                                --this lists the items it gives you you can add more if you want
             {
                 name = "legaligators",
@@ -91,6 +92,7 @@ Config.locations = {
         enemynpc = true,
         coordinates = { x = 1416.96, y = 1802.72, z = 170.48 },
         pedmodel = 'MP_A_C_BEAR_01',
+        CooldownTime = 7200000,
         GivenItems = {
             {
                 name = "Steak",
@@ -125,6 +127,7 @@ Config.locations = {
         enemynpc = true,
         coordinates = { x = -1526.75, y = 517.37, z = 102.05 },
         pedmodel = 'MP_A_C_Wolf_01',
+        CooldownTime = 7200000,
         GivenItems = {
             {
                 name = "legwolfs1", --this is the 2nd item it gives
@@ -159,6 +162,7 @@ Config.locations = {
         enemynpc = true,
         coordinates = { x = 1182.4, y = -96.61, z = 96.55 },
         pedmodel = 'MP_A_C_Boar_01',
+        CooldownTime = 7200000,
         GivenItems = {
             {
                 name = "legboars", --this is the 2nd item it gives
@@ -193,6 +197,7 @@ Config.locations = {
         enemynpc = false,
         coordinates = { x = 751.77, y = -971.89, z = 48.7 },
         pedmodel = 'MP_A_C_FOX_01',
+        CooldownTime = 7200000,
         GivenItems = {
             {
                 name = "legfoxs3", --this is the 2nd item it gives
@@ -236,7 +241,10 @@ Config.Language = {
     LegAnimalSpawned = 'The Animal is Nearby!',
     AnimalSkinned = 'You skinned the Animal, and got its pelt!',
     Leveldisp = 'Your Current Level',
-    Nolevel = 'You have not experinced enough to talk to me'
+    Nolevel = 'You have not experinced enough to talk to me',
+    AlreadyInMission = 'You are already doing a hunt!',
+    WebhookTitle = 'Bcc Legendaries',
+    WebhookDesc = 'Has Started Hunting The'
 }
 
 
