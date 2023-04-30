@@ -40,6 +40,7 @@ function spawnanimal()
         Citizen.Wait(100) --waits 100ms preventing crashing
         if StopAll then break end --if var true then break loop
         if IsEntityDead(Createdped2) == 1 then --if entity is dead then
+            Inmission = false
             skinnedped() break --trigger function and break loop
         end
     end

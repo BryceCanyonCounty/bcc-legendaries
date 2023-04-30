@@ -3,6 +3,7 @@ StopAll = false -- This is the variable used for the dead check
 local level = 0 -- Creates a variable to store the players level client side(sets to 0 when you join server)
 local subtractamoount = 0 -- Creates a variable used to store the amount to subtract off cost based on your level if config.level is true
 local elem = {}
+Inmission = false
 ----------------------------------------- Menu Setup -----------------------------------------
 TriggerEvent("menuapi:getData", function(call)
     MenuData = call
@@ -82,35 +83,34 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                 else
                     Cost = data.current.info.hintcost
                 end
-                TriggerServerEvent('bcc:legendaries:menuopen5', Cost) -- triggers the server cooldown event
-                RegisterNetEvent('bcc:legendaries:menuopen4') -- creates a client event
-                AddEventHandler('bcc:legendaries:menuopen4', function() -- adds a function to the client event
-                    Animal = data.current.info.pedmodel -- sets varible to the config option to be used in the other .lua files
-                    Animalcoords = data.current.info.coordinates
-                    Npccoords = data.current.info.Npccoords
-                    Npcblipcoords = data.current.info.npcblipcoord
-                    Npcchest = data.current.info.npcschest
-                    Investigate = data.current.info.investigationspot
-                    Thuntname = data.current.info.huntname
-                    Npcspawnyn = data.current.info.enemynpc
-                    Rewards = data.current.info.GivenItems
-                    Health = data.current.info.Leganimalhealth
-                    Secondarynpcspawn = data.current.info.SecondaryAnimals.Animalspawns
-                    Secondarynpcboolean = data.current.info.SecondaryAnimals.secondaryanimals
-                    Secondarynpcmodel = data.current.info.SecondaryAnimals.animalmodel
-                    VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) -- text in bottom right
-                    offcatcher() -- triggers offcatcher
-                    searchsetupmain('InitSearch', Investigate.x, Investigate.y, Investigate.z) -- triggers the search setup
-                end)
+                if not Inmission then
+                    TriggerServerEvent('bcc:legendaries:menuopen5', Cost, data.current.info.huntname, data.current.info.CooldownTime) -- triggers the server cooldown event
+                    RegisterNetEvent('bcc:legendaries:menuopen4') -- creates a client event
+                    AddEventHandler('bcc:legendaries:menuopen4', function() -- adds a function to the client event
+                        Inmission = true
+                        Animal = data.current.info.pedmodel -- sets varible to the config option to be used in the other .lua files
+                        Animalcoords = data.current.info.coordinates
+                        Npccoords = data.current.info.Npccoords
+                        Npcblipcoords = data.current.info.npcblipcoord
+                        Npcchest = data.current.info.npcschest
+                        Investigate = data.current.info.investigationspot
+                        Thuntname = data.current.info.huntname
+                        Npcspawnyn = data.current.info.enemynpc
+                        Rewards = data.current.info.GivenItems
+                        Health = data.current.info.Leganimalhealth
+                        Secondarynpcspawn = data.current.info.SecondaryAnimals.Animalspawns
+                        Secondarynpcboolean = data.current.info.SecondaryAnimals.secondaryanimals
+                        Secondarynpcmodel = data.current.info.SecondaryAnimals.animalmodel
+                        VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) -- text in bottom right
+                        offcatcher() -- triggers offcatcher
+                        searchsetupmain('InitSearch', Investigate.x, Investigate.y, Investigate.z) -- triggers the search setup
+                    end)
+                else
+                    VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
+                end
             end
         end)
     end
-end)
-
--------- Event to tell you cooldown is active ------------------------
-RegisterNetEvent('bcc:legendaries:failmenuopen')
-AddEventHandler('bcc:legendaries:failmenuopen', function()
-    VORPcore.NotifyBottomRight(Config.Language.Cooldownactive, 6000) -- text in bottom right
 end)
 
 ---------------- Creates a thread(runs on start) to check if your near the coords an hit the g button -----------------------
