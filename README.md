@@ -7,7 +7,7 @@
 - Can create your own hunts!
 - Gives rewards when the player skins the animal!
 - Can enable or disable enemy npcs during the hunt!
-- Global cooldown between hunts!
+- Individual hunt cooldowns!
 - Can enable or disable extra animals to spawn and fight you when you find the legendary animal!
 - Easy to translate via Config.language in the config.lua file!
 - Everything is easily configurable in the Config.lua!
@@ -30,7 +30,7 @@
 - VORP Utils
 - Menu Api
 - VORP Inventory
-- bcc-versioner
+- bcc-utils
 
 ## Installation Steps
 - Add the file to your resource file

@@ -5,6 +5,10 @@ local VORPcore = {}
 TriggerEvent("getCore", function(core)
   VORPcore = core
 end)
+local BccUtils = {}
+TriggerEvent('bcc:getUtils', function(bccutils)
+  BccUtils = bccutils
+end)
 
 ------------------------ Handles Giving Player Items when hunt over -----------------------
 RegisterServerEvent('bcc:legendaries:giveitemsbear')
@@ -30,21 +34,27 @@ AddEventHandler('bcc:legendaries:giveitemsbear', function(Rewards)
 end)
 
 --------------------- Cooldown Setup ------------------------------------------------
-local cooldown = false --sets the check to false on server start
+local cooldowns = {}
 RegisterServerEvent('bcc:legendaries:menuopen5')
-AddEventHandler('bcc:legendaries:menuopen5', function(Cost)
-  local Character = VORPcore.getUser(source).getUsedCharacter
-  if cooldown == false then
+AddEventHandler('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
+  local _source = source
+  local Character = VORPcore.getUser(_source).getUsedCharacter
+  if cooldowns[shopid] then --Check if the robery has a cooldown registered yet.
+    if os.difftime(os.time(), cooldowns[shopid]) >= cdownt then -- Checks the current time difference from the stored enacted time, then checks if that difference us past the seconds threshold
+      cooldowns[shopid] = os.time() --Update the cooldown with the new enacted time.
+      VORPcore.AddWebhook(Config.Language.WebhookTitle, Config.WebhookLink, Character.identifier .. ' ' .. Config.Language.WebhookDesc .. ' ' .. shopid)
+      TriggerClientEvent('bcc:legendaries:menuopen4', _source, arg)
+      Character.removeCurrency(0, Cost)
+    else --robbery is on cooldown
+      VORPcore.NotifyBottomRight(_source, Config.Language.Cooldownactive, 6000)
+    end
+  else
+    cooldowns[shopid] = os.time() --Store the current time
     Character.removeCurrency(0, Cost)
-    TriggerClientEvent('bcc:legendaries:menuopen4', source, arg)
-    cooldown = true
-    Wait(GlobalHuntCooldown)
-    cooldown = false
-  elseif cooldown == true then
-    TriggerClientEvent('bcc:legendaries:failmenuopen', source)
+    VORPcore.AddWebhook(Config.Language.WebhookTitle, Config.WebhookLink, Character.identifier .. ' ' .. Config.Language.WebhookDesc .. ' ' .. shopid)
+    TriggerClientEvent('bcc:legendaries:menuopen4', _source, arg)    --Robbery is not on cooldown
   end
 end)
-
 ---------------------------------------- TESTING DATABASE --------------------------------------------------
 
 --------- This will create the bcc:legendaries table on script launch if it does not already exist -----------------
@@ -101,6 +111,4 @@ AddEventHandler('bcc:legendaries:GetTrustLevel', function()
 end)
 
 --This will handle version checking
-local versioner = exports['bcc-versioner'].initiate()
-local repo = 'https://github.com/BryceCanyonCounty/bcc-legendaries'
-versioner.checkRelease(GetCurrentResourceName(), repo)
+BccUtils.Versioner.checkRelease(GetCurrentResourceName(), 'https://github.com/BryceCanyonCounty/bcc-legendaries')
