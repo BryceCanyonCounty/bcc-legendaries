@@ -5,7 +5,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(1000)
 
     for k, v in pairs(Config.shop) do
-        local model = GetHashKey('mp_re_slumpedhunter_males_01') -- sets the npc model
+        local model = joaat('mp_re_slumpedhunter_males_01') -- sets the npc model
         modelload(model)
 
         local npc = CreatePed(model, v.Pos.x, v.Pos.y, v.Pos.z - 1.0, v.Pos.h, false, false, true, true)
@@ -53,8 +53,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(10)
-        local player = PlayerPedId()
-        local coords = GetEntityCoords(player)
+        local coords = GetEntityCoords(PlayerPedId())
         local sleep = true
         for k, v in pairs(Config.shop) do
             if GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 2.5 then
@@ -67,5 +66,3 @@ Citizen.CreateThread(function()
         end
     end
 end)
-
-

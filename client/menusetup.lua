@@ -18,7 +18,6 @@ AddEventHandler("onResourceStop", function(resourceName)
 end)
 
 -- this is used to close the menu while you are on the main menu and hit backspace button
-RegisterNetEvent('bcc-legendaries:MenuClose')
 AddEventHandler('bcc-legendaries:MenuClose', function()
     while true do -- loops will run permantely
         Citizen.Wait(10) -- waits 10ms prevents crashing
@@ -29,7 +28,6 @@ AddEventHandler('bcc-legendaries:MenuClose', function()
 end)
 
 local huntlocation
-RegisterNetEvent('bcc:legendaries:openmenu')
 AddEventHandler('bcc:legendaries:openmenu', function(location)
     huntlocation = location
     local elements = {} -- sets the var to a table
@@ -85,32 +83,21 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                 end
                 if not Inmission then
                     TriggerServerEvent('bcc:legendaries:menuopen5', Cost, data.current.info.huntname, data.current.info.CooldownTime) -- triggers the server cooldown event
-                    RegisterNetEvent('bcc:legendaries:menuopen4') -- creates a client event
-                    AddEventHandler('bcc:legendaries:menuopen4', function() -- adds a function to the client event
-                        Inmission = true
-                        Animal = data.current.info.pedmodel -- sets varible to the config option to be used in the other .lua files
-                        Animalcoords = data.current.info.coordinates
-                        Npccoords = data.current.info.Npccoords
-                        Npcblipcoords = data.current.info.npcblipcoord
-                        Npcchest = data.current.info.npcschest
-                        Investigate = data.current.info.investigationspot
-                        Thuntname = data.current.info.huntname
-                        Npcspawnyn = data.current.info.enemynpc
-                        Rewards = data.current.info.GivenItems
-                        Health = data.current.info.Leganimalhealth
-                        Secondarynpcspawn = data.current.info.SecondaryAnimals.Animalspawns
-                        Secondarynpcboolean = data.current.info.SecondaryAnimals.secondaryanimals
-                        Secondarynpcmodel = data.current.info.SecondaryAnimals.animalmodel
-                        VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) -- text in bottom right
-                        offcatcher() -- triggers offcatcher
-                        searchsetupmain('InitSearch', Investigate.x, Investigate.y, Investigate.z) -- triggers the search setup
-                    end)
+                    Data = data.current.info
                 else
                     VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
                 end
             end
         end)
     end
+end)
+
+---------- Event That Starts the hunt
+RegisterNetEvent('bcc:legendaries:menuopen4', function()
+    Inmission = true
+    VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000) -- text in bottom right
+    offcatcher() -- triggers offcatcher
+    searchsetupmain('InitSearch', Data.investigationspot.x, Data.investigationspot.y, Data.investigationspot.z)
 end)
 
 ---------------- Creates a thread(runs on start) to check if your near the coords an hit the g button -----------------------
@@ -120,34 +107,24 @@ Citizen.CreateThread(function()
         for k, v in pairs(Config.shop) do
             if GetDistanceBetweenCoords(v.Pos.x, v.Pos.y, v.Pos.z, GetEntityCoords(PlayerPedId()), false) < 2 then
                 if IsControlJustReleased(0, 0x760A9C6F) then
-                    if Config.LevelSystem == true then
-                        TriggerServerEvent('bcc:legendaries:DBCheck') -- triggers server event that makes sure you exist in the db
-                        Wait(500) -- waits 150 ms gives server time to check
-                        TriggerServerEvent('bcc:legendaries:GetTrustLevel') -- triggers server event to get your level
-                        Wait(300) -- Waits 100ms gives server time to run
-                        levelcalc() -- triggers level check function
+                    if Config.LevelSystem then
+                        TriggerServerEvent('bcc:legendaries:DBCheck', v.name) -- triggers server event that makes sure you exist in the db
+                        Wait(200)
+                    else
+                        TriggerEvent('bcc:legendaries:openmenu', v.name)
                     end
-                    TriggerEvent('bcc:legendaries:openmenu', v.name) -- Trigger Menu Event with location name
                 end
             end
         end
     end
 end)
 
------------------------- Level Catch Setup ---------------------------------
-RegisterNetEvent('bcc:legendaries:ClientLevelCatch')
-AddEventHandler('bcc:legendaries:ClientLevelCatch',
-    function(trust, sentname) -- Catches the trust variable from the server
-        level = trust
-    end)
-
 ------------------------------------ Dead check Setup -------------------------------
 function offcatcher()
     Citizen.CreateThread(function()
         while true do -- creates a loop
             Citizen.Wait(1000) -- prevents crashse
-            local op = IsPedDeadOrDying(PlayerPedId()) -- deteces if the player is alive or dead if alive it prints false if ded it prints 1
-            if op == 1 then -- if player is dead then it sets stop all to true
+            if IsPedDeadOrDying(PlayerPedId()) then -- if player is dead then it sets stop all to true
                 StopAll = true -- global variable set to true
                 break
             end
@@ -156,13 +133,13 @@ function offcatcher()
 end
 
 -------------------------------- Detecting Level -----------------------------
-function levelcalc()
-    for key, value in pairs(Config.Levels) do -- creates a for loop in config.levels
-        if level >= value.level and level < value.nextlevel then -- if level is greater than level, and less than the next then
-            subtractamoount = value.costreduction
-            break -- sets the variable and breaks the loop
-        elseif level < value.level then -- elseif you are not equal too or greater than the very first level then
-            break -- prints in client and breaks loop preventing the subtractamoount from being set(this keeps anyone below the first level from getting a reduction in cost)
-        end
+RegisterNetEvent('bcc-legendaries:ClientLevelCatch', function(trust, name)
+    level = trust
+    Wait(100)
+    for key, v in pairs(Config.Levels) do
+        if level >= v.level and level < v.nextlevel then
+            subtractamoount = v.costreduction break
+        elseif level < v.level then break end
     end
-end
+    TriggerEvent('bcc:legendaries:openmenu', name)
+end)

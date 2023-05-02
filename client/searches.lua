@@ -43,7 +43,7 @@ function searchsetupmain(type, x, y, z) --function catches these variables from 
 
     --Type detection setup
     if type == 'InitSearch' then --if type recieved is the string then
-        if Npcspawnyn then --if var true then
+        if Data.enemynpc then --if var true then
             npc() --trigger function
         else --else var is not true then
             spawnanimal() --trigger function

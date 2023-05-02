@@ -15,7 +15,7 @@ function skinnedped()
                     local player = PlayerPedId()
                     local playergate = player == ped
                     if playergate == true and bool_unk == 1 then --if the varaible Animal is the gator then
-                        TriggerServerEvent('bcc:legendaries:giveitemsbear', Rewards)
+                        TriggerServerEvent('bcc:legendaries:giveitemsbear', Data.GivenItems)
                         Wait(300000)
                         DeletePed(Createdped2)
                         break
