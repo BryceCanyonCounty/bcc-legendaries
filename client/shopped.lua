@@ -10,10 +10,7 @@ Citizen.CreateThread(function()
 
         local npc = CreatePed(model, v.Pos.x, v.Pos.y, v.Pos.z - 1.0, v.Pos.h, false, false, true, true)
         Citizen.InvokeNative(0x283978A15512B2FE, npc, true)
-        SetEntityCanBeDamaged(npc, false)
-        SetEntityInvincible(npc, true)
-        FreezeEntityPosition(npc, true)
-        SetBlockingOfNonTemporaryEvents(npc, true)
+        BccUtils.Ped.SetStatic(npc)
         
         if v.allowblip then
             local blip = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, v.Pos.x, v.Pos.y, v.Pos.z) -- This create a blip with a defualt blip hash we given
@@ -58,7 +55,7 @@ Citizen.CreateThread(function()
         for k, v in pairs(Config.shop) do
             if GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 2.5 then
                 sleep = false
-                DrawText3D(v.Pos.x, v.Pos.y, v.Pos.z, Config.Language.Shoptext) -- creates the text
+                BccUtils.Misc.DrawText3D(v.Pos.x, v.Pos.y, v.Pos.z, Config.Language.Shoptext) -- creates the text
             end
         end
         if sleep then

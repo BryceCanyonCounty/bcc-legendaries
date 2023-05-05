@@ -8,13 +8,16 @@ function skinnedped()
                 local event = GetEventAtIndex(0, index)
                 if event == 1376140891 then
                     local view = exports["bcc-legendaries"]:DataViewNativeGetEventData(0, index, 3) --for it to work in otehr codes changehorizon legend to the file name
+                    local pedGathered = view['2']
                     local ped = view['0']
+                    local model = GetEntityModel(pedGathered)
+                    local model2 = GetEntityModel(Createdped2)
                     -- Bool to let you know if animation/longpress was enacted.
                     local bool_unk = view['4']
                     -- Ensure the player who enacted the event is the one who gets the rewards
                     local player = PlayerPedId()
                     local playergate = player == ped
-                    if playergate == true and bool_unk == 1 then --if the varaible Animal is the gator then
+                    if playergate == true and bool_unk == 1 and model == model2 then --if the varaible Animal is the gator then
                         TriggerServerEvent('bcc:legendaries:giveitemsbear', Data.GivenItems)
                         Wait(300000)
                         DeletePed(Createdped2)
