@@ -1,56 +1,48 @@
---Animal spawn setup
+--------- Legendary Animal Spawn Setup -----------
 function spawnanimal()
-    --Variables Setup
-    local secondaryanimals = {}      --creates a table for the secondary animals that will be spawned (this way if the config is set to spawn more than one, the delete ped native can delete all of them not just one of them)
+    local secondaryanimals = {}
     local model = joaat(Data.pedmodel)
-    local coords = Data.coordinates      -- pulls the global set in menusetup.lua
+    local coords = Data.coordinates
 
     modelload(model)
-    
-    --Blip and Waypoint Setup
-    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0) --creates a blip with the yellow circle around it
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip) --names blip
-    VORPutils.Gps:SetGps(coords.x, coords.y, coords.z) --Creates the gps waypoint
 
-    --Dist Tracker Setup
+    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip)
+    VORPutils.Gps:SetGps(coords.x, coords.y, coords.z)
+
     distcheck(coords.x, coords.y, coords.z, 40, PlayerPedId())
-    if StopAll then -- if true then
-        RemoveBlip(blip) --removes blip
-        VORPutils.Gps:RemoveGps() --Removes the gps waypoint
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return --prints on screen and returns ending the function here not allowing more code to run
+    if StopAll then
+        RemoveBlip(blip)
+        VORPutils.Gps:RemoveGps()
+        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
     end
-    RemoveBlip(blip) --deletes blip
-    VORPutils.Gps:RemoveGps() --removes gps
+    RemoveBlip(blip)
+    VORPutils.Gps:RemoveGps()
 
-    --Animal Spawning Setup
     if Data.SecondaryAnimals.secondaryanimals then
         for o, e in pairs(Data.SecondaryAnimals.Animalspawns) do
-            secondaryanimals[o] = CreatePed(Data.SecondaryAnimals.animalmodel, e.x, e.y, e.z, true, true, true, true) --spawns the animals and will store them in the seconday animals table for later deletion if you die
-            Citizen.InvokeNative(0x283978A15512B2FE, secondaryanimals[o], true)                       --This sets the ped into a random outift(fixes an invisiblity bug)
-            Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, secondaryanimals[o])                  --sets the blip that tracks the ped
+            secondaryanimals[o] = spawnPed(Data.SecondaryAnimals.animalmodel, e.x, e.y, e.z, true)
         end
     end
-    Createdped2 = CreatePed(model, coords.x, coords.y, coords.z, true, true, true, true) --creates the ped
-    Citizen.InvokeNative(0x283978A15512B2FE, Createdped2, true)      --This sets the ped into a random outift(fixes an invisiblity bug)
-    Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, Createdped2)      --sets the blip that tracks the ped
-    VORPcore.NotifyRightTip(Config.Language.LegAnimalSpawned, 4000) --prints on screen
-    SetEntityHealth(Createdped2, Data.Leganimalhealth, 0) --changes the entity health to the set variable from config
-    --Deadchecking
-    while true do --while loop wont stop until broken
-        Citizen.Wait(100) --waits 100ms preventing crashing
-        if StopAll then break end --if var true then break loop
+    Createdped2 = spawnPed(model, coords.x, coords.y, coords.z, true)
+    VORPcore.NotifyRightTip(Config.Language.LegAnimalSpawned, 4000)
+    SetEntityHealth(Createdped2, Data.Leganimalhealth, 0)
+
+    while true do
+        Wait(100)
+        if StopAll then break end
         if IsEntityDead(Createdped2) then
             Inmission = false
-            skinnedped() break --trigger function and break loop
+            skinnedped() break
         end
     end
-    if StopAll then --if var true then
-        if Data.SecondaryAnimals.secondaryanimals then --if var true then
-            for e, u in pairs(secondaryanimals) do --for loop in the secondaryanimals table
-                DeletePed(u) --deletes ped (this for loop deletes all peds that were created)
+    if StopAll then
+        if Data.SecondaryAnimals.secondaryanimals then
+            for e, u in pairs(secondaryanimals) do
+                DeletePed(u)
             end
         end
-        DeletePed(Createdped2) --deletes the main ped(legendary animal)
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return --prints on screen and returns ending the function here
+        DeletePed(Createdped2)
+        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
     end
 end

@@ -1,7 +1,7 @@
 --Pulled from vorp_hunting and modified to function the way i wanted it too
 function skinnedped()
     while true do
-        Citizen.Wait(2)
+        Wait(2)
         local size = GetNumberOfEvents(0)
         if size > 0 then
             for index = 0, size - 1 do

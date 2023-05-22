@@ -13,15 +13,16 @@ end)
 ------------------------ Handles Giving Player Items when hunt over -----------------------
 RegisterServerEvent('bcc:legendaries:giveitemsbear')
 AddEventHandler('bcc:legendaries:giveitemsbear', function(Rewards)
+  local _source = source
   for k, v in pairs(Rewards) do
-    VorpInv.addItem(source, v.name, v.count)
+    VorpInv.addItem(_source, v.name, v.count)
   end
   if Config.LevelSystem then
-    local Character = VORPcore.getUser(source).getUsedCharacter
+    local Character = VORPcore.getUser(_source).getUsedCharacter
     local param = { ['charidentifier'] = Character.charIdentifier, ['identifier'] = Character.identifier, ['levelin'] = Config.LevelIncreaseperHunt }
     exports.oxmysql:execute('UPDATE legendaries SET `trust`=trust+@levelin WHERE charidentifier=@charidentifier AND identifier=@identifier', param)
   end
-  VORPcore.NotifyBottomRight(source, Config.Language.AnimalSkinned, 4000)
+  VORPcore.NotifyBottomRight(_source, Config.Language.AnimalSkinned, 4000)
 end)
 
 --------------------- Cooldown Setup ------------------------------------------------
@@ -49,9 +50,8 @@ end)
 
 --------- This will create the bcc:legendaries table on script launch if it does not already exist -----------------
 -------Pulled from bcc:pets and modified ----------------------
-Citizen.CreateThread(function()
-  --Using oxmysql to create the table if its not already made every time script is launched
-  if Config.LevelSystem then --if level system is true then
+CreateThread(function()
+  if Config.LevelSystem then
     exports.oxmysql:execute([[CREATE TABLE if NOT EXISTS `legendaries` (
       `identifier` varchar(50) NOT NULL, /*Creates a tab in the table for ident*/
       `charidentifier` int(11) NOT NULL,
@@ -69,7 +69,7 @@ AddEventHandler('bcc:legendaries:DBCheck', function(name)
   local param = { ['charidentifier'] = Character.charIdentifier  , ['identifier'] = Character.identifier  }
   --------The if you exist in db code was pulled from vorp_banking and modified ----------------
   exports.oxmysql:execute("SELECT identifier, charidentifier FROM legendaries WHERE identifier = @Playeridentifier AND charidentifier = @CharIdentifier", { ["@Playeridentifier"] = Character.identifier, ["CharIdentifier"] = Character.charIdentifier }, function(result)
-    if result[1] then                                                                                              --This will run if your char id or player id is in the db already
+    if result[1] then
       --Player already exists do nothing
     else
       exports.oxmysql:execute("INSERT INTO legendaries ( `charidentifier`,`identifier` ) VALUES ( @charidentifier,@identifier )", param)
@@ -87,7 +87,7 @@ AddEventHandler('bcc:legendaries:DBCheck', function(name)
       ran = true
     end)
     while true do
-      Citizen.Wait(10)
+      Wait(10)
       if ran then break end
     end
   until rep
