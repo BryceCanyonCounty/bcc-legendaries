@@ -12,23 +12,25 @@ TriggerEvent('bcc:getUtils', function(bccutils)
     BccUtils = bccutils
 end)
 
---Function to load model
-function modelload(model) --recieves the models hash from whereever this function is called
-    RequestModel(model) -- requests the model to load into the game
-    if not HasModelLoaded(model) then --checks if its loaded
-      RequestModel(model) --if it hasnt loaded then request it to load again
-    end
+function modelload(model) --Function To load the model
+    RequestModel(model)
     while not HasModelLoaded(model) do
       Wait(100)
     end
 end
 
---Function used to handle distance checking
-function distcheck(x, y, z, dist, entity) --receives these variables from whereever it is triggered
-    while true do --while loop will not stop until broken
-        if StopAll then break end --if either variable is true then break loop
-        Citizen.Wait(100) --waits 100ms preventing crashing
-        local ec = GetEntityCoords(entity) --gets the entities coords
-        if GetDistanceBetweenCoords(ec.x, ec.y, ec.z, x, y, z, true) < dist then break end --if the dist between the entity and the coords are less than the dist break loop
+function distcheck(x, y, z, dist, entity) --Function used to handle distance checking
+    while true do
+        if StopAll then break end
+        Wait(200)
+        local ec = GetEntityCoords(entity)
+        if GetDistanceBetweenCoords(ec.x, ec.y, ec.z, x, y, z, true) < dist then break end
     end
+end
+
+function spawnPed(model, x, y, z, networked)
+    local createdped = CreatePed(model, x, y, z, networked, true, true, true)
+    Citizen.InvokeNative(0x283978A15512B2FE, createdped, true)
+    Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, createdped)
+    return createdped
 end
