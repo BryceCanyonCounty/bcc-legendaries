@@ -5,12 +5,13 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 lua54 'yes'
 author 'Jake2k4'
 
-server_scripts {
-    'server.lua',
+shared_scripts {
+    'config.lua'
 }
 
-shared_scripts {
-    'config.lua',
+server_scripts {
+    '@oxmysql/lib/MySQL.lua',
+    'server.lua'
 }
 
 
@@ -22,7 +23,7 @@ client_scripts {
     '/client/menusetup.lua',
     '/client/searches.lua',
     '/client/skinned.js',
-    '/client/skinned.lua',
+    '/client/skinned.lua'
 }
 
 version '1.2.1'
@@ -32,5 +33,4 @@ dependency {
     'vorp_inventory',
     'vorp_utils',
     'bcc-utils',
-    'menuapi'
 }

@@ -7,9 +7,9 @@ VORPcore = {}
 TriggerEvent("getCore", function(core)
     VORPcore = core
 end)
-BccUtils = {}
-TriggerEvent('bcc:getUtils', function(bccutils)
-    BccUtils = bccutils
+BccUtils = exports['bcc-utils'].initiate()
+TriggerEvent("menuapi:getData", function(call)
+    MenuData = call
 end)
 
 function modelload(model) --Function To load the model

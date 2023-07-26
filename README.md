@@ -35,6 +35,7 @@
 ## Installation Steps
 - Add the file to your resource file
 - Add ensure 'bcc-legendaries' to your resources.cfg
+- Run the sql file
 - Can not change name from 'bcc-legendaries' otherwise script will break
 
 ## Side notes

@@ -1,11 +1,6 @@
 StopAll, Inmission = false, false
 local level, subtractamoount, elem, inmenu = 0, 0, {}, false
 
------------------------------------------ Menu Setup -----------------------------------------
-TriggerEvent("menuapi:getData", function(call)
-    MenuData = call
-end)
-
 ----- Bspace to exit menu -----
 AddEventHandler('bcc-legendaries:MenuClose', function()
     while inmenu do
@@ -19,12 +14,13 @@ end)
 local huntlocation
 AddEventHandler('bcc:legendaries:openmenu', function(location)
     huntlocation = location
-    local elements, elementindex = {}, 1
+    local elements, elementindex, requiredLevel = {}, 1, nil
     inmenu = true
     TriggerEvent('bcc-legendaries:MenuClose')
     MenuData.CloseAll()
     for k, items in pairs(Config.locations) do
         if items.location == huntlocation then
+            requiredLevel = items.level
             if Config.LevelSystem then
                 if items.level <= level then
                     Cost = items.hintcost - subtractamoount
@@ -49,8 +45,7 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
             end
         end
     end
-    local next = next
-    if next(elem) == nil then
+    if requiredLevel > level then
         VORPcore.NotifyBottomRight(Config.Language.Nolevel, 6000)
     else
         MenuData.Open('default', GetCurrentResourceName(), 'menuapi', {
