@@ -21,9 +21,44 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
     for k, items in pairs(Config.locations) do
         if items.location == huntlocation then
             requiredLevel = items.level
-            if Config.LevelSystem then
-                if items.level <= level then
-                    Cost = items.hintcost - subtractamoount
+            if Config.UseItem then
+                if Config.LevelSystem then
+                    if items.level <= level then
+                        Cost = Config.NeedItem
+                        elements[elementindex] = {
+                            label = items.huntname .. ' ' .. Cost .. '',
+                            value = 'buyhint' .. tostring(elementindex),
+                            desc = '',
+                            info = items
+                        }
+                        elementindex = elementindex + 1
+                    end
+                    elem = elements
+                else
+                    Cost = Config.NeedItem
+                    elements[elementindex] = {
+                        label = items.huntname .. ' ' .. Cost .. '',
+                        value = 'buyhint' .. tostring(elementindex),
+                        desc = '',
+                        info = items
+                    }
+                    elementindex = elementindex + 1
+                end
+            else
+                if Config.LevelSystem then
+                    if items.level <= level then
+                        Cost = items.hintcost - subtractamoount
+                        elements[elementindex] = {
+                            label = items.huntname .. ' ' .. Cost .. '$',
+                            value = 'buyhint' .. tostring(elementindex),
+                            desc = '',
+                            info = items
+                        }
+                        elementindex = elementindex + 1
+                    end
+                    elem = elements
+                else
+                    Cost = items.hintcost
                     elements[elementindex] = {
                         label = items.huntname .. ' ' .. Cost .. '$',
                         value = 'buyhint' .. tostring(elementindex),
@@ -32,16 +67,6 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                     }
                     elementindex = elementindex + 1
                 end
-                elem = elements
-            else
-                Cost = items.hintcost
-                elements[elementindex] = {
-                    label = items.huntname .. ' ' .. Cost .. '$',
-                    value = 'buyhint' .. tostring(elementindex),
-                    desc = '',
-                    info = items
-                }
-                elementindex = elementindex + 1
             end
         end
     end
@@ -57,12 +82,22 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
             if (data.current == "backup") then
                 _G[data.trigger]()
             else
-                if Config.LevelSystem then
-                    if data.current.info.level <= level then
-                        Cost = data.current.info.hintcost - subtractamoount
+                if Config.UseItem then
+                    if Config.LevelSystem then
+                        if data.current.info.level <= level then
+                            Cost = Config.NeedItem
+                        end
+                    else
+                        Cost = Config.NeedItem
                     end
                 else
-                    Cost = data.current.info.hintcost
+                    if Config.LevelSystem then
+                        if data.current.info.level <= level then
+                            Cost = data.current.info.hintcost - subtractamoount
+                        end
+                    else
+                        Cost = data.current.info.hintcost
+                    end
                 end
                 if not Inmission then
                     TriggerServerEvent('bcc:legendaries:menuopen5', Cost, data.current.info.huntname, data.current.info.CooldownTime)
@@ -78,6 +113,7 @@ end)
 ---------- Event That Starts the hunt
 RegisterNetEvent('bcc:legendaries:menuopen4', function()
     Inmission = true
+    MenuData.CloseAll()
     VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000)
     TriggerEvent('bcc-legendaries:DeadCheck')
     searchsetupmain('InitSearch', Data.investigationspot.x, Data.investigationspot.y, Data.investigationspot.z)
