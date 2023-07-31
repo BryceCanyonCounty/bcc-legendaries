@@ -34,13 +34,21 @@ RegisterServerEvent('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
       cooldowns[shopid] = os.time() --Update the cooldown with the new enacted time.
       VORPcore.AddWebhook(Config.Language.WebhookTitle, Config.WebhookLink, Character.identifier .. ' ' .. Config.Language.WebhookDesc .. ' ' .. shopid)
       TriggerClientEvent('bcc:legendaries:menuopen4', _source)
-      Character.removeCurrency(0, Cost)
+      if Config.UseItem then
+        VorpInv.subItem(_source, Config.NeedItem, 1)
+      else
+        Character.removeCurrency(0, Cost)
+      end
     else --robbery is on cooldown
       VORPcore.NotifyBottomRight(_source, Config.Language.Cooldownactive, 6000)
     end
   else
     cooldowns[shopid] = os.time() --Store the current time
-    Character.removeCurrency(0, Cost)
+    if Config.UseItem then
+      VorpInv.subItem(_source, Config.NeedItem, 1)
+    else
+      Character.removeCurrency(0, Cost)
+    end
     VORPcore.AddWebhook(Config.Language.WebhookTitle, Config.WebhookLink, Character.identifier .. ' ' .. Config.Language.WebhookDesc .. ' ' .. shopid)
     TriggerClientEvent('bcc:legendaries:menuopen4', _source)    --Robbery is not on cooldown
   end

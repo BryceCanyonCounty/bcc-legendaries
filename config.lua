@@ -43,6 +43,8 @@ Config.Levels = {
 }
 
 ----------------------------------- Hunt Setup ------------------------------------
+Config.NeedItem = "legendarylicense"
+Config.UseItem = true
 Config.locations = {
     {
         --gator setup
