@@ -1,12 +1,13 @@
 StopAll, Inmission = false, false
-local level, subtractamoount, elem, inmenu = 0, 0, {}, false
+local level, subtractamoount, inmenu = 0, 0, false
 
 ----- Bspace to exit menu -----
 AddEventHandler('bcc-legendaries:MenuClose', function()
     while inmenu do
         Wait(5)
         if IsControlJustReleased(0, 0x156F7119) then
-            MenuData.CloseAll()
+            BCCLegendarieshMenu:Close()
+            inmenu = false
         end
     end
 end)
@@ -14,64 +15,71 @@ end)
 local huntlocation
 AddEventHandler('bcc:legendaries:openmenu', function(location)
     huntlocation = location
-    local elements, elementindex, requiredLevel = {}, 1, nil
+    local requiredLevel = nil
     inmenu = true
     TriggerEvent('bcc-legendaries:MenuClose')
-    MenuData.CloseAll()
+    BCCLegendarieshMenu:Close()
+    local legendariesMainMenu = BCCLegendarieshMenu:RegisterPage("bcc-legendares:MainPage")
+    legendariesMainMenu:RegisterElement('header', {
+        value = Config.Language.Menuname,
+        slot = 'header',
+        style = {}
+    })
+
     for k, items in pairs(Config.locations) do
         if items.location == huntlocation then
             requiredLevel = items.level
             if Config.LevelSystem then
                 if items.level <= level then
                     Cost = items.hintcost - subtractamoount
-                    elements[elementindex] = {
+                    legendariesMainMenu:RegisterElement("button", {
                         label = items.huntname .. ' ' .. Cost .. '$',
-                        value = 'buyhint' .. tostring(elementindex),
-                        desc = '',
-                        info = items
-                    }
-                    elementindex = elementindex + 1
+                        style = {}
+                    }, function()
+                        if Config.LevelSystem then
+                            if items.level <= level then
+                                Cost = items.hintcost - subtractamoount
+                            end
+                        else
+                            Cost = items.hintcost
+                        end
+                        if not Inmission then
+                            TriggerServerEvent('bcc:legendaries:menuopen5', Cost, items.huntname, items.CooldownTime)
+                            Data = items
+                        else
+                            VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
+                        end
+                    end)
                 end
-                elem = elements
             else
                 Cost = items.hintcost
-                elements[elementindex] = {
+                legendariesMainMenu:RegisterElement("button", {
                     label = items.huntname .. ' ' .. Cost .. '$',
-                    value = 'buyhint' .. tostring(elementindex),
-                    desc = '',
-                    info = items
-                }
-                elementindex = elementindex + 1
+                    style = {}
+                }, function()
+                    if Config.LevelSystem then
+                        if items.level <= level then
+                            Cost = items.hintcost - subtractamoount
+                        end
+                    else
+                        Cost = items.hintcost
+                    end
+                    if not Inmission then
+                        TriggerServerEvent('bcc:legendaries:menuopen5', Cost, items.huntname, items.CooldownTime)
+                        Data = items
+                    else
+                        VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
+                    end
+                end)
             end
         end
     end
     if requiredLevel > level then
         VORPcore.NotifyBottomRight(Config.Language.Nolevel, 6000)
     else
-        MenuData.Open('default', GetCurrentResourceName(), 'menuapi', {
-            title = Config.Language.Menuname,
-            align = 'top-left',
-            elements = elements,
-            lastmenu = "MainMenu"
-        }, function(data)
-            if (data.current == "backup") then
-                _G[data.trigger]()
-            else
-                if Config.LevelSystem then
-                    if data.current.info.level <= level then
-                        Cost = data.current.info.hintcost - subtractamoount
-                    end
-                else
-                    Cost = data.current.info.hintcost
-                end
-                if not Inmission then
-                    TriggerServerEvent('bcc:legendaries:menuopen5', Cost, data.current.info.huntname, data.current.info.CooldownTime)
-                    Data = data.current.info
-                else
-                    VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
-                end
-            end
-        end)
+        BCCLegendarieshMenu:Open({
+            startupPage = legendariesMainMenu
+        })
     end
 end)
 
@@ -129,5 +137,5 @@ AddEventHandler("onResourceStop", function(resourceName)
     if resourceName ~= GetCurrentResourceName() then
         return
     end
-    MenuData.CloseAll()
+    BCCLegendarieshMenu:Close()
 end)
