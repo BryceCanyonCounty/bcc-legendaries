@@ -6,7 +6,9 @@ lua54 'yes'
 author 'Jake2k4'
 
 shared_scripts {
-    'config.lua'
+    'config.lua',
+    'locale.lua',
+    'languages/*.lua'
 }
 
 server_scripts {

@@ -6,11 +6,11 @@ function searchsetupmain(type, x, y, z)
 
     --Prompt Group Setup
     local PromptGroup = VORPutils.Prompts:SetupPromptGroup()
-    local firstprompt = PromptGroup:RegisterPrompt(Config.Language.ChestPrompt, 0x760A9C6F, 1, 1, true, 'hold', { timedeventhash = "MEDIUM_TIMED_EVENT" })
+    local firstprompt = PromptGroup:RegisterPrompt(_U('ChestPrompt'), 0x760A9C6F, 1, 1, true, 'hold', { timedeventhash = "MEDIUM_TIMED_EVENT" })
     
     --Blip and Waypoint Setup
     local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, x, y, z, 100.0)
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U('Lastlocationblip'))
     VORPutils.Gps:SetGps(x, y, z)
 
     --Distance Tracker Setup
@@ -21,7 +21,7 @@ function searchsetupmain(type, x, y, z)
         local dist = GetDistanceBetweenCoords(pl.x ,pl.y, pl.z, x, y, z, true)
         if dist < 3 then
             --Handles showing prompt, and prompt completion
-            PromptGroup:ShowGroup(Config.Language.ChestPrompt)
+            PromptGroup:ShowGroup(_U('ChestPrompt'))
             if firstprompt:HasCompleted() then
                 RemoveBlip(blip)
                 ClearGpsMultiRoute()
@@ -31,7 +31,7 @@ function searchsetupmain(type, x, y, z)
                     Wait(0)
                 end
                 TaskPlayAnim(PlayerPedId(), 'mech_ransack@chest@med@open@crouch@b', 'base', 8.0, 8.0, 1000, 17, 0.2, false, false, false)
-                VORPcore.NotifyRightTip(Config.Language.Cluefound, 4000) break
+                VORPcore.NotifyRightTip(_U('Cluefound'), 4000) break
             end
         elseif dist > 200 then
             Wait(2000)
@@ -41,7 +41,7 @@ function searchsetupmain(type, x, y, z)
         RemoveBlip(blip)
         ClearGpsMultiRoute()
         firstprompt:DeletePrompt()
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
+        VORPcore.NotifyRightTip(_U('Deadtext'), 4000) return
     end
 
     --Type detection setup

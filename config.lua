@@ -2,6 +2,8 @@ Config = {}
 
 Config.WebhookLink = '' --insert your webhook link here if you want webhooks
 
+Config.defaultlang = 'en_lang'
+
 Config.shop = {
     shoplocation = {
         allowblip = true,
