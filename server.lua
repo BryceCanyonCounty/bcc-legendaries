@@ -21,7 +21,7 @@ RegisterServerEvent('bcc:legendaries:giveitemsbear', function(Rewards)
     local param = { ['charidentifier'] = Character.charIdentifier, ['identifier'] = Character.identifier, ['levelin'] = Config.LevelIncreaseperHunt }
     exports.oxmysql:execute('UPDATE legendaries SET `trust`=trust+@levelin WHERE charidentifier=@charidentifier AND identifier=@identifier', param)
   end
-  VORPcore.NotifyBottomRight(_source, Config.Language.AnimalSkinned, 4000)
+  VORPcore.NotifyBottomRight(_source, _U('AnimalSkinned'), 4000)
 end)
 
 --------------------- Cooldown Setup ------------------------------------------------
@@ -32,16 +32,16 @@ RegisterServerEvent('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
   if cooldowns[shopid] then --Check if the robery has a cooldown registered yet.
     if os.difftime(os.time(), cooldowns[shopid]) >= cdownt then -- Checks the current time difference from the stored enacted time, then checks if that difference us past the seconds threshold
       cooldowns[shopid] = os.time() --Update the cooldown with the new enacted time.
-      VORPcore.AddWebhook(Config.Language.WebhookTitle, Config.WebhookLink, Character.identifier .. ' ' .. Config.Language.WebhookDesc .. ' ' .. shopid)
+      VORPcore.AddWebhook(_U('WebhookTitle'), Config.WebhookLink, Character.identifier .. ' ' .. _U('WebhookDesc') .. ' ' .. shopid)
       TriggerClientEvent('bcc:legendaries:menuopen4', _source)
       Character.removeCurrency(0, Cost)
     else --robbery is on cooldown
-      VORPcore.NotifyBottomRight(_source, Config.Language.Cooldownactive, 6000)
+      VORPcore.NotifyBottomRight(_source, _U('Cooldownactive'), 6000)
     end
   else
     cooldowns[shopid] = os.time() --Store the current time
     Character.removeCurrency(0, Cost)
-    VORPcore.AddWebhook(Config.Language.WebhookTitle, Config.WebhookLink, Character.identifier .. ' ' .. Config.Language.WebhookDesc .. ' ' .. shopid)
+    VORPcore.AddWebhook(_U('WebhookTitle'), Config.WebhookLink, Character.identifier .. ' ' .. _U('WebhookDesc') .. ' ' .. shopid)
     TriggerClientEvent('bcc:legendaries:menuopen4', _source)    --Robbery is not on cooldown
   end
 end)

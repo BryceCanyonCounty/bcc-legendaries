@@ -7,14 +7,14 @@ function spawnanimal()
     modelload(model)
 
     local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0)
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U('Lastlocationblip'))
     VORPutils.Gps:SetGps(coords.x, coords.y, coords.z)
 
     distcheck(coords.x, coords.y, coords.z, 40, PlayerPedId())
     if StopAll then
         RemoveBlip(blip)
         VORPutils.Gps:RemoveGps()
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
+        VORPcore.NotifyRightTip(_U('Deadtext'), 4000) return
     end
     RemoveBlip(blip)
     VORPutils.Gps:RemoveGps()
@@ -25,7 +25,7 @@ function spawnanimal()
         end
     end
     Createdped2 = spawnPed(model, coords.x, coords.y, coords.z, true)
-    VORPcore.NotifyRightTip(Config.Language.LegAnimalSpawned, 4000)
+    VORPcore.NotifyRightTip(_U('LegAnimalSpawned'), 4000)
     SetEntityHealth(Createdped2, Data.Leganimalhealth, 0)
 
     while true do
@@ -43,6 +43,6 @@ function spawnanimal()
             end
         end
         DeletePed(Createdped2)
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
+        VORPcore.NotifyRightTip(_U('Deadtext'), 4000) return
     end
 end

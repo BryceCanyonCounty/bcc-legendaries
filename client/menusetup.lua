@@ -21,7 +21,7 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
     BCCLegendarieshMenu:Close()
     local legendariesMainMenu = BCCLegendarieshMenu:RegisterPage("bcc-legendares:MainPage")
     legendariesMainMenu:RegisterElement('header', {
-        value = Config.Language.Menuname,
+        value = _U('Menuname'),
         slot = 'header',
         style = {}
     })
@@ -47,7 +47,7 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                             TriggerServerEvent('bcc:legendaries:menuopen5', Cost, items.huntname, items.CooldownTime)
                             Data = items
                         else
-                            VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
+                            VORPcore.NotifyBottomRight(_U('AlreadyInMission'), 4000)
                         end
                     end)
                 end
@@ -68,14 +68,14 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                         TriggerServerEvent('bcc:legendaries:menuopen5', Cost, items.huntname, items.CooldownTime)
                         Data = items
                     else
-                        VORPcore.NotifyBottomRight(Config.Language.AlreadyInMission, 4000)
+                        VORPcore.NotifyBottomRight(_U('AlreadyInMission'), 4000)
                     end
                 end)
             end
         end
     end
     if requiredLevel > level then
-        VORPcore.NotifyBottomRight(Config.Language.Nolevel, 6000)
+        VORPcore.NotifyBottomRight(_U('Nolevel'), 6000)
     else
         BCCLegendarieshMenu:Open({
             startupPage = legendariesMainMenu
@@ -86,7 +86,7 @@ end)
 ---------- Event That Starts the hunt
 RegisterNetEvent('bcc:legendaries:menuopen4', function()
     Inmission = true
-    VORPcore.NotifyBottomRight(Config.Language.Initialblipmark, 2000)
+    VORPcore.NotifyBottomRight(_U('Initialblipmark'), 2000)
     TriggerEvent('bcc-legendaries:DeadCheck')
     searchsetupmain('InitSearch', Data.investigationspot.x, Data.investigationspot.y, Data.investigationspot.z)
 end)

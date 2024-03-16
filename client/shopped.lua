@@ -42,7 +42,7 @@ CreateThread(function()
         for k, v in pairs(Config.shop) do
             if GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < 2.5 then
                 sleep = false
-                BccUtils.Misc.DrawText3D(v.Pos.x, v.Pos.y, v.Pos.z, Config.Language.Shoptext)
+                BccUtils.Misc.DrawText3D(v.Pos.x, v.Pos.y, v.Pos.z, _U("Shoptext"))
             end
         end
         if sleep then

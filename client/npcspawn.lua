@@ -7,7 +7,7 @@ function npc()
 
     --Blip and waypoint setup
     local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, Data.npcblipcoord.x, Data.npcblipcoord.y, Data.npcblipcoord.z, 100.0)
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.Language.Lastlocationblip)
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U('Lastlocationblip'))
     VORPutils.Gps:SetGps(Data.npcblipcoord.x, Data.npcblipcoord.y, Data.npcblipcoord.z)
 
     --Distance Tracker Setup
@@ -15,7 +15,7 @@ function npc()
     if StopAll then
         RemoveBlip(blip)
         VORPutils.Gps:RemoveGps()
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
+        VORPcore.NotifyRightTip(_U('Deadtext'), 4000) return
     end
     ClearGpsMultiRoute()
     RemoveBlip(blip)
@@ -26,7 +26,7 @@ function npc()
         TaskCombatPed(createdped[k], PlayerPedId())
         count[k] = createdped[k]
     end
-    VORPcore.NotifyRightTip(Config.Language.Poachersattack, 6000)
+    VORPcore.NotifyRightTip(_U('Poachersattack'), 6000)
     
     --DeadCheckSetup
     local x = #Data.Npccoords
@@ -39,7 +39,7 @@ function npc()
                     x = x - 1
                     count[k] = nil
                     if x == 0 then
-                        VORPcore.NotifyRightTip(Config.Language.Poachersdead, 6000)
+                        VORPcore.NotifyRightTip(_U('Poachersdead'), 6000)
                         searchsetupmain('NpcSearch', Data.npcschest.x, Data.npcschest.y, Data.npcschest.z) break
                     end
                 end
@@ -50,6 +50,6 @@ function npc()
         for k, v in pairs(createdped) do
             DeletePed(v)
         end
-        VORPcore.NotifyRightTip(Config.Language.Deadtext, 4000) return
+        VORPcore.NotifyRightTip(_U('Deadtext'), 4000) return
     end
 end
