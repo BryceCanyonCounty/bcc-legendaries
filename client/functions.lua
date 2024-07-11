@@ -46,5 +46,34 @@ function spawnPed(model, x, y, z, networked)
     local createdped = CreatePed(model, x, y, z, networked, true, true, true)
     Citizen.InvokeNative(0x283978A15512B2FE, createdped, true)
     Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, createdped)
+
     return createdped
+end
+
+function SetOutfitPreset(ped,preset)
+    return Citizen.InvokeNative(0x77FF8D35EEC6BBC4,ped,preset)
+end
+
+function IsLegendaryDeadly(pedid)
+    local Predators = {
+        `mp_a_c_bear_01`,
+        `mp_a_c_wolf_01`,
+        `mp_a_c_panther_01`,
+        `mp_a_c_cougar_01`,
+        `mp_a_c_alligator_01`,
+        `a_c_alligator_02`,
+        `a_c_snake_01`,
+        `a_c_snakeredboa10ft_01`,
+		`a_c_lionmangy_01`,
+        `a_c_cougar_01`,
+        `A_C_Wolf`,
+        `a_c_bear_01`,
+    }
+    local model = GetEntityModel(pedid)
+    for i,v in pairs(Predators) do
+        if model == v then
+            return true
+        end
+    end
+    return false
 end

@@ -57,6 +57,7 @@ Config.locations = {
         enemynpc = true,                                              --if you want to fight enemy npcs or not
         coordinates = { x = 2002.28, y = -1758.61, z = 41.03 },       --this is where the animal will spawn
         pedmodel = 'A_C_Alligator_02',                                -- Ped model of the animal
+        outfit = 0,                                                   -- Check Pastebin (https://pastebin.com/6Vc26NLL) or Alternatively Spooner
         CooldownTime = 30000,                                        -- Time in ms that will have to pass before anyone can hunt this animal again
         GivenItems = {                                                --this lists the items it gives you you can add more if you want
             {
@@ -94,6 +95,7 @@ Config.locations = {
         enemynpc = true,
         coordinates = { x = 1416.96, y = 1802.72, z = 170.48 },
         pedmodel = 'MP_A_C_BEAR_01',
+        outfit = 0,                                                   -- Check Pastebin (https://pastebin.com/6Vc26NLL) or Alternatively Spooner
         CooldownTime = 7200000,
         GivenItems = {
             {
@@ -129,6 +131,7 @@ Config.locations = {
         enemynpc = true,
         coordinates = { x = -1526.75, y = 517.37, z = 102.05 },
         pedmodel = 'MP_A_C_Wolf_01',
+        outfit = 0,                                                   -- Check Pastebin (https://pastebin.com/6Vc26NLL) or Alternatively Spooner
         CooldownTime = 7200000,
         GivenItems = {
             {
@@ -164,6 +167,7 @@ Config.locations = {
         enemynpc = true,
         coordinates = { x = 1182.4, y = -96.61, z = 96.55 },
         pedmodel = 'MP_A_C_Boar_01',
+        outfit = 0,                                                   -- Check Pastebin (https://pastebin.com/6Vc26NLL) or Alternatively Spooner
         CooldownTime = 7200000,
         GivenItems = {
             {
@@ -199,6 +203,7 @@ Config.locations = {
         enemynpc = false,
         coordinates = { x = 751.77, y = -971.89, z = 48.7 },
         pedmodel = 'MP_A_C_FOX_01',
+        outfit = 0,                                                   -- Check Pastebin (https://pastebin.com/6Vc26NLL) or Alternatively Spooner
         CooldownTime = 7200000,
         GivenItems = {
             {
@@ -223,6 +228,43 @@ Config.locations = {
             },
         },
     }, --Too add more hunts just copy and paste one from above and change what you need
+    { 
+        --Veteran Lvl setup
+        hintcost = 80,
+        location = "Strawberry",                                     
+        level = 5,                                                    
+        Leganimalhealth = 800,                                        
+        investigationspot = {x = 1651.57, y = -829.82, z = 41.83}, 
+        huntname = 'Legendary Sapa Cougar',                                 
+        enemynpc = true,                                              
+        coordinates = {x = 1739.02, y = -1081.78, z = 41.5},       
+        pedmodel = 'mp_a_c_cougar_01', 		
+		outfit = 2,
+        CooldownTime = 30000,                                       
+        GivenItems = {                                                
+            {
+                 name = "legfoxs3",
+                count = 1
+            },
+        },
+        npcblipcoord = {x = 1970.66, y = -1882.32, z = 41.9}, 
+        npcschest = {x = 1970.66, y = -1882.32, z = 41.9},   
+        Npccoords = {                                          
+            {x = 1970.66, y = -1882.32, z = 41.9},
+            {x = 1970.1, y = -1901.12, z = 41.99},
+            {x = 1977.51, y = -1878.39, z = 41.9},
+            {x = 1965.68, y = -1870.12, z = 41.67},   
+            
+        },
+        SecondaryAnimals = {
+            secondaryanimals = false,         
+            animalmodel = 'A_C_Wolf', 
+            Animalspawns = {
+                {x = -1789.36, y = 777.43, z = 136.29},
+                {x = -1791.47, y = 779.84, z = 136.6},
+            },
+        },
+    },
 }
 
 ------------------------------------------ TRANSLATE HERE! ------------------------------------------------------

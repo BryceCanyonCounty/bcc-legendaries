@@ -2,6 +2,7 @@
 function spawnanimal()
     local secondaryanimals = {}
     local model = joaat(Data.pedmodel)
+    local preset = Data.outfit 
     local coords = Data.coordinates
 
     modelload(model)
@@ -25,6 +26,11 @@ function spawnanimal()
         end
     end
     Createdped2 = spawnPed(model, coords.x, coords.y, coords.z, true)
+    SetOutfitPreset(Createdped2,preset)
+    if IsLegendaryDeadly(Createdped2) then
+        Citizen.InvokeNative(0x9F7794730795E019,Createdped2,5,true)
+        Citizen.InvokeNative(0x9F7794730795E019,Createdped2,58,true)
+    end
     VORPcore.NotifyRightTip(_U('LegAnimalSpawned'), 4000)
     SetEntityHealth(Createdped2, Data.Leganimalhealth, 0)
 
