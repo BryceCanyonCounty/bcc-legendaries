@@ -3,6 +3,7 @@
 > This is a simple easily configurable Legendary Animal Hunting Script for RedM.
 
 ## Features
+
 - Menu for the hunts!
 - Can create your own hunts!
 - Gives rewards when the player skins the animal!
@@ -16,29 +17,34 @@
 - Version check system to help you keep up to date on new features and bug fixes!
 
 ## How it works
+
 - You can set up the hunter(the location you go to start hunts) coordinates in the Config.lua and when you go there you will find an npc and some text. Do what the text says to open the hunt menu.
 - Leveling system works by each hunt you successfully do, your level increases by a set amount(set in config) and the higher level you are the cheaper the hints are!
 
 ## Why use it
-- It has alot of cool features too it. 
-- I will offer as much support as I can for it. 
-- Will add some more stuff to do in your RedM server. 
+
+- It has alot of cool features too it.
+- I will offer as much support as I can for it.
+- Will add some more stuff to do in your RedM server.
 - Is a overall fun quest style hunt.
 
 ## Requirements
+
 - VORP Core
 - VORP Utils
-- Menu Api
+- [Feather Menu](https://github.com/FeatherFramework/feather-menu)
 - VORP Inventory
-- bcc-utils
+- [bcc-utils](https://github.com/BryceCanyonCounty/bcc-utils)
 
 ## Installation Steps
+
 - Add the file to your resource file
 - Add ensure 'bcc-legendaries' to your resources.cfg
 - Run the sql file
 - Can not change name from 'bcc-legendaries' otherwise script will break
 
 ## Side notes
+
 - Credit to vorp_hunting that is where i pulled the skinned.js and skinned.lua from and modified it to do what I want here.
 - If you are adding new hunts in the config.lua please only use Legendary Animal models otherwise it could lead to duping bug
 - This has a built in skinning system so if you have legendary animals setup in your hunting script remove them from the hunting script
