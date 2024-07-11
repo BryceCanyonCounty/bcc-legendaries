@@ -1,0 +1,22 @@
+Locales["fr_lang"] = {
+    Deadtext = 'Vous êtes mort, la chasse a échoué',
+    Cluefound = 'Vous avez trouvé un indice pointant vers l\'emplacement de l\'animal',
+    Initialblipmark = 'Le dernier emplacement connu de l\'animal a été marqué',
+    Poachersattack = 'Attention ! Des braconniers attaquent !',
+    Cooldownactive = 'Je n\'ai rien à offrir, revenez plus tard',
+    Lastlocationblip = 'Dernier emplacement',
+    Poachersdead = 'Vous avez tué les braconniers, maintenant cherchez des indices autour de vous',
+    Poacherschestblip = 'Coffre des braconniers',
+    ChestPrompt = 'Fouillez le coffre',
+    ClueBlip = 'Indice',
+    Menuname = "Chasses légendaires",
+    Hunterblip = "Chasseur",
+    Shoptext = 'Appuyez sur "G" pour voir ce que le chasseur propose',
+    LegAnimalSpawned = 'L\'animal est à proximité !',
+    AnimalSkinned = 'Vous avez dépouillé l\'animal et obtenu sa fourrure !',
+    Leveldisp = 'Votre niveau actuel',
+    Nolevel = 'Vous n\'avez pas assez d\'expérience pour me parler',
+    AlreadyInMission = 'Vous êtes déjà en train de chasser !',
+    WebhookTitle = 'Bcc Légendaires',
+    WebhookDesc = 'A commencé à chasser le'
+}
