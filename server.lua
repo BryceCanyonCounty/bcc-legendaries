@@ -41,7 +41,7 @@ RegisterServerEvent('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
 
 
   if activeHunts[_source] then
-    VORPcore.NotifyBottomRight(_source, _U('HuntActive'), 6000)
+    VORPcore.NotifyBottomRight(_source, _U('AlreadyInMission'), 6000)
     return
   end
 
