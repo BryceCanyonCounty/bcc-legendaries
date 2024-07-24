@@ -2,6 +2,9 @@
 local VorpInv = {}
 VorpInv = exports.vorp_inventory:vorp_inventoryApi()
 local VORPcore = {}
+
+local activeHunts = {} -- NEW
+
 TriggerEvent("getCore", function(core)
   VORPcore = core
 end)
@@ -13,6 +16,12 @@ end)
 ------------------------ Handles Giving Player Items when hunt over -----------------------
 RegisterServerEvent('bcc:legendaries:giveitemsbear', function(Rewards)
   local _source = source
+
+  if not activeHunts[_source] then
+    return
+  end
+
+
   for k, v in pairs(Rewards) do
     VorpInv.addItem(_source, v.name, v.count)
   end
@@ -21,6 +30,7 @@ RegisterServerEvent('bcc:legendaries:giveitemsbear', function(Rewards)
     local param = { ['charidentifier'] = Character.charIdentifier, ['identifier'] = Character.identifier, ['levelin'] = Config.LevelIncreaseperHunt }
     exports.oxmysql:execute('UPDATE legendaries SET `trust`=trust+@levelin WHERE charidentifier=@charidentifier AND identifier=@identifier', param)
   end
+  activeHunts[_source] = nil
   VORPcore.NotifyBottomRight(_source, _U('AnimalSkinned'), 4000)
 end)
 
@@ -28,6 +38,13 @@ end)
 local cooldowns = {}
 RegisterServerEvent('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
   local _source = source
+
+
+  if activeHunts[_source] then
+    VORPcore.NotifyBottomRight(_source, _U('HuntActive'), 6000)
+  return
+
+
   local Character = VORPcore.getUser(_source).getUsedCharacter
   if cooldowns[shopid] then --Check if the robery has a cooldown registered yet.
     if os.difftime(os.time(), cooldowns[shopid]) >= cdownt then -- Checks the current time difference from the stored enacted time, then checks if that difference us past the seconds threshold
@@ -35,6 +52,7 @@ RegisterServerEvent('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
       VORPcore.AddWebhook(_U('WebhookTitle'), Config.WebhookLink, Character.identifier .. ' ' .. _U('WebhookDesc') .. ' ' .. shopid)
       TriggerClientEvent('bcc:legendaries:menuopen4', _source)
       Character.removeCurrency(0, Cost)
+      activeHunts[_source] = true
     else --robbery is on cooldown
       VORPcore.NotifyBottomRight(_source, _U('Cooldownactive'), 6000)
     end
@@ -43,6 +61,7 @@ RegisterServerEvent('bcc:legendaries:menuopen5', function(Cost, shopid, cdownt)
     Character.removeCurrency(0, Cost)
     VORPcore.AddWebhook(_U('WebhookTitle'), Config.WebhookLink, Character.identifier .. ' ' .. _U('WebhookDesc') .. ' ' .. shopid)
     TriggerClientEvent('bcc:legendaries:menuopen4', _source)    --Robbery is not on cooldown
+    activeHunts[_source] = true
   end
 end)
 
