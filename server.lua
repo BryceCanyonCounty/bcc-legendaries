@@ -18,7 +18,6 @@ end)
 RegisterServerEvent('bcc:legendaries:giveitemsbear', function(huntId)
   local _source = source
 
-  huntId = tonumber(huntId)
   if not activeHunts[_source] then
     return
   end
