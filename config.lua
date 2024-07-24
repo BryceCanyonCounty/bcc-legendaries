@@ -282,6 +282,7 @@ Config.Language = {
     Menuname = "Legendary Hunts",
     Hunterblip = "Hunter",
     Shoptext = 'Press "G" to see what the hunter is offering',
+    HuntActive = 'You have a hunt already active, finish it before starting a new one !',
     LegAnimalSpawned = 'The Animal is Nearby!',
     AnimalSkinned = 'You skinned the Animal, and got its pelt!',
     Leveldisp = 'Your Current Level',
