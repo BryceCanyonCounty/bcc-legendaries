@@ -46,6 +46,14 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                         if not Inmission then
                             TriggerServerEvent('bcc:legendaries:menuopen5', Cost, items.huntname, items.CooldownTime)
                             Data = items
+                            Data.id = k
+                            -- Debug items
+                            -- for kv, vk in pairs(Config.locations[Data.id].GivenItems) do 
+                            --     print(kv, vk)
+                            --     for key, value in pairs(vk) do 
+                            --         print(key, value)
+                            --     end
+                            -- end
                         else
                             VORPcore.NotifyBottomRight(_U('AlreadyInMission'), 4000)
                         end
@@ -67,6 +75,8 @@ AddEventHandler('bcc:legendaries:openmenu', function(location)
                     if not Inmission then
                         TriggerServerEvent('bcc:legendaries:menuopen5', Cost, items.huntname, items.CooldownTime)
                         Data = items
+                        Data.id = k
+                        -- print('Data id :', Data.id)
                     else
                         VORPcore.NotifyBottomRight(_U('AlreadyInMission'), 4000)
                     end
@@ -115,7 +125,9 @@ AddEventHandler('bcc-legendaries:DeadCheck', function()
     while true do
         Wait(1000)
         if IsPedDeadOrDying(PlayerPedId()) then
-            StopAll = true break
+            StopAll = true 
+            TriggerServerEvent('bcc-legendaries:stophunt')
+            break
         end
     end
 end)
