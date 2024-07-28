@@ -87,6 +87,14 @@ RegisterServerEvent('bcc:legendaries:DBCheck', function(name)
   end
 end)
 
+AddEventHandler('playerDropped', function(reason)
+    local _source = source
+
+    if activeHunts[_source] then
+        activeHunts[_source] = nil
+    end
+end)
+
 
 ---------- If you are dead, then it will stop the hunt
 RegisterServerEvent('bcc-legendaries:stophunt', function()
