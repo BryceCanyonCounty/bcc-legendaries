@@ -104,9 +104,10 @@ end)
 ---------------- Creates a thread(runs on start) to check if your near the coords an hit the g button -----------------------
 CreateThread(function()
     while true do
-        Wait(5)
+        local sleep = 1000
         for k, v in pairs(Config.shop) do
-            if GetDistanceBetweenCoords(v.Pos.x, v.Pos.y, v.Pos.z, GetEntityCoords(PlayerPedId()), false) < 2 then
+            if #(vector3(v.Pos.x, v.Pos.y, v.Pos.z) - GetEntityCoords(PlayerPedId())) < 2 then
+                sleep = 0
                 if IsControlJustReleased(0, 0x760A9C6F) then
                     if Config.LevelSystem then
                         TriggerServerEvent('bcc:legendaries:DBCheck', v.name)
@@ -117,6 +118,7 @@ CreateThread(function()
                 end
             end
         end
+        Wait(sleep)
     end
 end)
 
