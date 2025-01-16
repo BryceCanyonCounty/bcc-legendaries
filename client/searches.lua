@@ -1,57 +1,77 @@
---Creates the search chest function that is used twice in the script
-function searchsetupmain(type, x, y, z)
-    --Spawning Object Setup
-    local object = CreateObject('p_chest01x', x, y, z - 1, true, false, false)
-    RequestModel(object, true)
+function SearchSetup(type, x, y, z, data)
+    -- Chest Setup
+    local chest = CreateObject(joaat('p_chest01x'), x, y, z - 1, true, false, false)
+    PlaceObjectOnGroundProperly(chest, true)
+    Wait(500)
+    FreezeEntityPosition(chest, true)
 
-    --Prompt Group Setup
-    local PromptGroup = VORPutils.Prompts:SetupPromptGroup()
-    local firstprompt = PromptGroup:RegisterPrompt(_U('ChestPrompt'), 0x760A9C6F, 1, 1, true, 'hold', { timedeventhash = "MEDIUM_TIMED_EVENT" })
-    
-    --Blip and Waypoint Setup
-    local blip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, x, y, z, 100.0)
-    Citizen.InvokeNative(0x9CB1A1623062F402, blip, _U('Lastlocationblip'))
-    VORPutils.Gps:SetGps(x, y, z)
+    -- Chest Prompt Setup
+    local ChestGroup = GetRandomIntInRange(0, 0xffffff)
+    local chestPrompt = UiPromptRegisterBegin()
+    UiPromptSetControlAction(chestPrompt, Config.keys.chest)
+    UiPromptSetText(chestPrompt, CreateVarString(10, 'LITERAL_STRING', _U('Open')))
+    UiPromptSetVisible(chestPrompt, true)
+    UiPromptSetEnabled(chestPrompt, true)
+    UiPromptSetHoldMode(chestPrompt, 2000)
+    UiPromptSetGroup(chestPrompt, ChestGroup, 0)
+    UiPromptRegisterEnd(chestPrompt)
 
-    --Distance Tracker Setup
-    while true do
-        Wait(5)
-        if StopAll then break end
-        local pl = GetEntityCoords(PlayerPedId())
-        local dist = GetDistanceBetweenCoords(pl.x ,pl.y, pl.z, x, y, z, true)
-        if dist < 3 then
-            --Handles showing prompt, and prompt completion
-            PromptGroup:ShowGroup(_U('ChestPrompt'))
-            if firstprompt:HasCompleted() then
-                RemoveBlip(blip)
-                ClearGpsMultiRoute()
-                --Playing Animation
-                RequestAnimDict('mech_ransack@chest@med@open@crouch@b')
-                while not HasAnimDictLoaded('mech_ransack@chest@med@open@crouch@b') do
-                    Wait(0)
-                end
-                TaskPlayAnim(PlayerPedId(), 'mech_ransack@chest@med@open@crouch@b', 'base', 8.0, 8.0, 1000, 17, 0.2, false, false, false)
-                VORPcore.NotifyRightTip(_U('Cluefound'), 4000) break
-            end
-        elseif dist > 200 then
-            Wait(2000)
-        end
-    end
-    if StopAll then
-        RemoveBlip(blip)
+    -- Blip and Waypoint Setup
+    local chestBlip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, x, y, z, 100.0) -- BlipAddForRadius
+    Citizen.InvokeNative(0x9CB1A1623062F402, chestBlip, _U('Lastlocationblip')) -- SetBlipName
+    StartGPS(x, y, z)
+
+    -- Cleanup Function
+    local function Cleanup()
+        RemoveBlip(chestBlip)
         ClearGpsMultiRoute()
-        firstprompt:DeletePrompt()
-        VORPcore.NotifyRightTip(_U('Deadtext'), 4000) return
+        UiPromptDelete(chestPrompt)
+        DeleteEntity(chest)
     end
 
-    --Type detection setup
-    if type == 'InitSearch' then
-        if Data.enemynpc then
-            npc()
-        else
-            spawnanimal()
+    -- Main Loop
+    local sleep = 1000
+    local playerPed = PlayerPedId()
+    local animDict = 'mech_ransack@chest@med@open@crouch@b'
+    local animName = 'base'
+    local hintBoxCoords = vector3(x, y, z)
+
+    RequestAnimDict(animDict)
+    while not HasAnimDictLoaded(animDict) do
+        Wait(0)
+    end
+
+    while true do
+        if StopAll then
+            Core.NotifyRightTip(_U('Deadtext'), 4000)
+            Cleanup()
+            return
         end
-    elseif type == 'NpcSearch' then
-        spawnanimal()
+
+        local playerCoords = GetEntityCoords(playerPed)
+        local dist = #(playerCoords - hintBoxCoords)
+
+        if dist <= 3 then
+            sleep = 0
+            UiPromptSetActiveGroupThisFrame(ChestGroup, CreateVarString(10, 'LITERAL_STRING', _U('ChestPrompt')))
+            if UiPromptHasHoldModeCompleted(chestPrompt) then
+                HidePedWeapons(playerPed, 2, true)
+                TaskPlayAnim(playerPed, animDict, animName, 8.0, 8.0, 5000, 17, 0.2, false, false, false)
+                Wait(5000)
+                Core.NotifyRightTip(_U('Cluefound'), 4000)
+                Cleanup()
+                break
+            end
+        else
+            sleep = 1000
+        end
+        Wait(sleep)
+    end
+
+    -- NPC and Animal Spawning
+    if type == 'InitSearch' and data.npc.enabled then
+        SpawnNpcs(data)
+    elseif type == 'InitSearch' or type == 'NpcSearch' then
+        SpawnAnimal(data)
     end
 end
