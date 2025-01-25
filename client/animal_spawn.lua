@@ -45,7 +45,7 @@ function SpawnAnimal(data)
 
         Citizen.InvokeNative(0x283978A15512B2FE, ped, true) -- SetRandomOutfitVariation
         Citizen.InvokeNative(0x23f74c2fda6e7c61, 953018525, ped) -- BlipAddForEntity
-        Citizen.InvokeNative(0x77FF8D35EEC6BBC4, ped, data.outfit) -- EquipMetaPedOutfitPreset
+        Citizen.InvokeNative(0x77FF8D35EEC6BBC4, ped, data.legendary.outfit) -- EquipMetaPedOutfitPreset
 
         if IsLegendaryDeadly(ped) then
             Citizen.InvokeNative(0x9F7794730795E019, ped, 5, true) -- SetPedCombatAttributes / CA_ALWAYS_FIGHT
