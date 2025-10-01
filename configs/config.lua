@@ -3,6 +3,11 @@ Config = {}
 Config.defaultlang = "en_lang"
 -----------------------------------------------------
 
+Config.devMode = {
+    active = false, -- Set to true to enable debug prints
+}
+-----------------------------------------------------
+
 Config.keys = {
     menu = 0x760A9C6F,  --[G] Open Menu
     chest = 0x760A9C6F, --[G] Open Chest
@@ -18,12 +23,35 @@ Config.discord = {
 }
 -----------------------------------------------------
 
--- Level System (see "levels.lua")
-Config.levelSystem = {
+-- Trust Level System (see "levels.lua")
+-- Note: Trust discounts only apply to cash and gold currencies, not item-based currencies
+Config.trustSystem = {
     active = true,          -- Default: true / Set to false to disable the level system
     increment = 1,          -- Default: 1 / Amount to Increase Level per Completed Hunt
     maxLevel = 100,         -- Default: 100 / Maximum Level + All Levels Above / Adjust based on "levels.lua"
     maxLevelDiscount = 100, -- Default: 100 / Maximum Level Discount Percentage / Adjust based on "levels.lua"
+}
+-----------------------------------------------------
+
+-- Trust System Security Configuration
+-- Controls security and access for the trust system exports
+Config.trustSecurity = {
+    enabled = true,                     -- Enable/disable trust system security features
+    minTrust = 0,                      -- Minimum trust value allowed
+    maxTrust = 100,                 -- Maximum trust value allowed
+    maxSingleChange = 100,            -- Maximum trust change in a single operation
+    rateLimitEnabled = true,           -- Enable rate limiting for export calls
+    rateLimitCalls = 10,               -- Maximum calls per minute per resource
+    rateLimitWindow = 60,              -- Rate limit window in seconds
+    auditLogging = true,               -- Enable audit logging for trust changes
+    discordAudit = false,              -- Send audit logs to Discord (requires discord.active = true)
+
+    -- Resources authorized to modify trust values
+    -- Add resource names here to allow them to use trust exports
+    -- Format: ['resource-name'] = true
+    authorizedResources = {
+        -- ['your-resource'] = true,
+    }
 }
 -----------------------------------------------------
 
