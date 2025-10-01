@@ -1,2 +1,12 @@
+<3.0.0>
+Breaking Changes: Update your config files
+• Keyed hunt system to prevent using wrong hunt config
+• Items as currency for hunts
+• Secure trust system exports with validation
+• Memory leak prevention with smart cleanup
+• Improved hunt discount calculation precision
+• Enhanced and automated database schema management
+• Automated stale hunt cleanup
+
 <2.0.2>
 See GitHub for Details!
