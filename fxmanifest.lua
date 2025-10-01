@@ -7,12 +7,14 @@ author 'BCC Team'
 
 shared_scripts {
     'configs/*.lua',
+    'debug_init.lua',
     'locale.lua',
     'languages/*.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'server/database.lua',
     'server/main.lua'
 }
 
@@ -34,4 +36,4 @@ dependency {
     'feather-menu'
 }
 
-version '2.0.2'
+version '3.0.0'
