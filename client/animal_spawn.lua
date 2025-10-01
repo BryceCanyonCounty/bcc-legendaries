@@ -1,10 +1,18 @@
+local Core = exports.vorp_core:GetCore()
+---@type BCCLegendariesDebugLib
+local DBG = BCCLegendariesDebug
+
 function SpawnAnimal(data)
     local secondaryAnimals = {}
     local modelName = data.legendary.model
     local model = joaat(modelName)
     local coords = data.legendary.coords
 
-    LoadModel(model, modelName)
+    -- Load model
+    if not LoadModel(model, modelName) then
+        DBG.Error(('Failed to load model: %s'):format(modelName))
+        return
+    end
 
     -- Blip and Waypoint Setup
     local legendaryBlip = Citizen.InvokeNative(0x45F13B7E0A15C880, -1282792512, coords.x, coords.y, coords.z, 130.0) -- BlipAddForRadius
