@@ -1,75 +1,227 @@
-# bcc-legendaries
+# BCC Legendaries 🏹
 
-## Description
-> The Legendary Hunting Script is a comprehensive and immersive addition to your gaming experience, designed to bring the thrill of hunting legendary animals to life. This script introduces a variety of legendary creatures, each with unique characteristics, behaviors, and rewards, making every hunt a memorable adventure.
+> **An immersive legendary animal hunting system for RedM featuring dynamic hunts, trust progression, and cross-resource integration with enterprise-grade security.**
 
-## Features
+## 📖 Overview
 
-- #### Diverse Legendary Animals:
-  - The script includes a wide range of legendary animals, from the elusive Legendary Pronghorn to the formidable Legendary Golden Spirit Bear. Each animal has its own unique model, health attributes, and spawn coordinates, ensuring a varied and challenging hunting experience.
+BCC Legendaries transforms the hunting experience by introducing a comprehensive system for tracking and hunting legendary animals. Each hunt is a unique adventure with challenging NPCs, strategic planning, and valuable rewards. The script features an advanced trust system with secure exports, professional database management, and enterprise-grade security features.
 
-- #### Detailed Hunt Configurations:
-  - Each legendary animal comes with a detailed configuration that includes:
-    - Name: The unique name of the hunt.
-    - Location: The specific shop or area where the hunt can be initiated.
-    - Level: The trust level required to start the hunt.
-    - Currency: The type and amount of currency needed to begin the hunt.
-    - Health: The health points of the legendary animal.
-    - Spawn Coordinates: The exact location where the animal will spawn.
-    - Rewards: The items and quantities awarded upon a successful hunt.
+## 🆕 What's New in v3.0.0
 
-- #### Enemy NPCs and Secondary Animals:
-  - To add an extra layer of challenge, the script includes enemy NPCs that players must defeat to progress in the hunt. These NPCs have their own models, blip coordinates, and hint boxes to guide players.
-  - Secondary animals are also spawned to assist the legendary animal, making the hunt more dynamic and unpredictable.
+### 🚀 **Major Architecture Improvements**
 
-- #### Hint Boxes and Blips:
-  - Hint boxes provide initial clues to help players locate the legendary animal. Additional hint boxes become available after defeating enemy NPCs, guiding players deeper into the hunt.
-  - Blips on the map help players navigate to the locations of enemy NPCs and hint boxes, ensuring they stay on track during the hunt.
+- **Keyed Hunt System**: Converted from array-based to keyed table format for O(1) lookup performance
+- **Memory Leak Prevention**: Smart cleanup system prevents stale hunt data accumulation
+- **Non-blocking Timers**: Replaced blocking threads with efficient timer-based cleanup
+- **Precision Calculations**: Fixed floating-point issues in discount calculations
 
-- #### Rewards System:
-  - Successfully completing a hunt rewards players with valuable items, such as legendary skins, antlers, and other rare materials. These rewards are unique to each legendary animal and can be used for crafting or selling.
+### 🔒 **Security Enhancements**
 
-- #### Cooldown Period:
-  - Each legendary animal has a cooldown period before it can be hunted again, adding a strategic element to the game. Players must plan their hunts carefully to maximize their rewards and avoid waiting periods.
+- **Secure Trust Exports**: Authorization-based access control for cross-resource integration
+- **Rate Limiting**: Prevents abuse of trust system exports
+- **Input Validation**: Comprehensive validation for all trust operations
+- **Audit Logging**: Complete audit trail with Discord integration support
 
-## How to Use:
-- #### Initiate a Hunt:
-  - Players can start a hunt by visiting the designated shop or location and selecting the legendary animal they wish to pursue.
-  - Ensure they have the required trust level and currency to begin the hunt.
+### ⚙️ **Configuration & Database**
 
-- #### Follow the Clues:
-  - Use the initial hint box and blip coordinates to navigate to the legendary animal's spawn location.
-  - Defeat any enemy NPCs along the way to unlock additional hint boxes and progress in the hunt.
+- **Auto Schema Management**: Database tables and migrations handled automatically
+- **Multi-DB Support**: Compatible with MySQL and OxMySQL with fallback handling
 
-- #### Engage the Legendary Animal:
-  - Once the legendary animal is located, players must use their hunting skills to take it down. Be prepared for a challenging battle, as these animals have enhanced health and behaviors.
+## ✨ Core Features
 
-- #### Claim the Rewards:
-  - Upon successfully defeating the legendary animal, players will receive their rewards. These can be used for various in-game purposes, such as crafting or selling for profit.
+### 🦌 **Legendary Animals**
 
-## Commands
- - `/hunterLevel` Players can check their current level
+- **63 Unique Hunts**: Wide variety from Legendary Pronghorn to Legendary Golden Spirit Bear
+- **Unique Models**: Each animal has distinct characteristics and behaviors
+- **Varied Locations**: Hunts span across different regions and environments
+- **Dynamic Health**: Balanced difficulty scaling for engaging combat
 
-## Dependencies
-- [vorp_core](https://github.com/VORPCORE/vorp-core-lua)
-- [vorp_inventory](https://github.com/VORPCORE/vorp_inventory-lua)
-- [bcc-utils](https://github.com/BryceCanyonCounty/bcc-utils)
-- [feather-menu](https://github.com/FeatherFramework/feather-menu/releases)
+### 🎯 **Trust Progression System**
 
-## Installation
-- Make sure dependencies are installed/updated and ensured before this script
-- Add `bcc-legendaries` folder to your resources folder
-- Add ensure 'bcc-legendaries' to your resources.cfg
-- Run the included database file `legendaries.sql`
-- Restart server
+- **Database Integration**: Persistent trust levels stored securely
+- **Level Requirements**: Hunts locked behind trust thresholds
+- **Automatic Tracking**: Trust gained/lost through gameplay
+- **Cross-Resource Compatible**: Secure export functions for other scripts
+- **Rate Limited**: Protection against abuse with configurable limits
 
-## Side notes
-- Credit to vorp_hunting that is where i pulled the skinned.js and skinned.lua from and modified it to do what I want here.
-- If you are adding new hunts in the config.lua please only use Legendary Animal models otherwise it could lead to duping bug
-- This has a built in skinning system so if you have legendary animals setup in your hunting script remove them from the hunting script
-- I really hope you enjoy the script thanks for trying it!
-- I have optimized this code quite alot, but if you see any code that can be optimized further please open a pull request and I will take a look if it works I will merge it. Or just tell me lol.
-- You can edit the code obviously. All I ask is that you release the edits to the community freely.
+### 🛡️ **Challenge Elements**
 
-## GitHub
-- https://github.com/BryceCanyonCounty/bcc-legendaries
+- **Enemy NPCs**: Hostile entities defending legendary animals
+- **Secondary Animals**: Additional creatures spawned during hunts
+- **Hint System**: Progressive clues guide players to targets
+- **Map Integration**: Blips and waypoints for navigation
+
+### 💰 **Reward System**
+
+- **Legendary Materials**: Unique pelts, antlers, and rare items
+- **Crafting Components**: Materials for advanced recipes
+- **Economic Integration**: Valuable items for trading/selling
+- **Hunt-Specific Rewards**: Each animal drops unique loot
+
+### ⏱️ **Strategic Elements**
+
+- **Cooldown Periods**: Prevents hunt farming and adds planning
+- **Currency Costs**: Economic investment required for hunts
+- **Trust Gates**: Progressive unlocking of higher-tier hunts
+- **Risk vs Reward**: Balanced challenge and reward scaling
+
+### 🗄️ **Advanced Database**
+
+- **Auto Schema Management**: Tables created and maintained automatically
+- **Migration Support**: Version tracking for seamless updates
+- **Multi-DB Compatible**: Works with MySQL and OxMySQL
+- **Admin Tools**: Console commands for database management
+
+## 🎮 How to Play
+
+### 1. **Prepare for the Hunt**
+
+- Visit a hunter shop or designated location
+- Check your trust level with `/hunterLevel`
+- Ensure you have sufficient currency for the hunt cost
+- Select your target legendary animal from the menu
+
+### 2. **Track Your Target**
+
+- Follow initial hint boxes and map blips
+- Defeat enemy NPCs to unlock additional clues
+- Use the progressive hint system to locate your quarry
+- Navigate through dynamic spawn locations
+
+### 3. **Engage in Combat**
+
+- Confront the legendary animal in epic battles
+- Deal with secondary animals and environmental challenges
+- Utilize strategic approaches for enhanced health enemies
+- Manage resources and ammunition effectively
+
+### 4. **Claim Your Rewards**
+
+- Skin the legendary animal using the built-in system
+- Receive unique pelts, antlers, and rare materials
+- Gain trust points for successful completions
+- Use rewards for crafting, trading, or selling
+
+## 🔧 Commands
+
+### Player Commands
+
+| Command | Description |
+|---------|-------------|
+| `/hunterLevel` | Check your current trust level and hunting progress |
+
+### Administrative Commands
+
+| Command | Access | Description |
+|---------|--------|-------------|
+| `bcc-legendaries:init` | Console | Force database initialization and schema creation |
+| `bcc-legendaries:verify` | Console | Verify database schema integrity and accessibility |
+
+## 🔌 Developer API
+
+### Trust System Exports
+
+BCC Legendaries provides a comprehensive API for other resources to interact with the trust system:
+
+| Function | Parameters | Returns | Description |
+|----------|------------|---------|-------------|
+| `GetPlayerTrust` | `identifier`, `charidentifier` | `number` | Retrieve player's current trust level |
+| `SetPlayerTrust` | `identifier`, `charidentifier`, `trust` | `boolean` | Set player's trust to specific value |
+| `AddPlayerTrust` | `identifier`, `charidentifier`, `trustToAdd` | `boolean` | Add trust points to player's total |
+| `RemovePlayerTrust` | `identifier`, `charidentifier`, `trustToRemove` | `boolean` | Remove trust points (minimum 0) |
+
+### Code Examples
+
+**Basic Trust Operations:**
+
+```lua
+-- Get current trust level
+local trust = exports['bcc-legendaries']:GetPlayerTrust(identifier, charidentifier)
+
+-- Reward player with trust points
+local success = exports['bcc-legendaries']:AddPlayerTrust(identifier, charidentifier, 15)
+
+-- Check if player meets trust requirement
+if trust >= 50 then
+    -- Allow access to premium content
+end
+```
+
+## 📋 Dependencies
+
+| Resource | Version | Required | Description |
+|----------|---------|----------|-------------|
+| [vorp_core](https://github.com/VORPCORE/vorp-core-lua) | Latest | ✅ | Core framework for RedM |
+| [vorp_inventory](https://github.com/VORPCORE/vorp_inventory-lua) | Latest | ✅ | Inventory system for item management |
+| [bcc-utils](https://github.com/BryceCanyonCounty/bcc-utils) | Latest | ✅ | BCC utility functions and Discord integration |
+| [feather-menu](https://github.com/FeatherFramework/feather-menu/releases) | Latest | ✅ | Menu system for hunt selection interface |
+
+## 🚀 Installation
+
+### Quick Setup
+
+1. **Prerequisites**
+   - Ensure all dependencies are installed and updated
+
+2. **File Installation**
+
+   ```bash
+   # Add to your resources folder
+   resources/
+   └── bcc-legendaries/
+   ```
+
+3. **Database Setup**
+   - Database tables will auto-create on first run
+
+4. **Server Configuration**
+
+   ```cfg
+   # Add to server.cfg or resources.cfg
+   ensure bcc-legendaries
+   ```
+
+5. **Restart Server**
+   - Restart your server to load the resource
+   - Check console for successful initialization
+
+### Verification
+
+Run these console commands to verify database installation:
+
+- `bcc-legendaries:verify` - Check database connectivity
+- `bcc-legendaries:init` - Force initialization if needed
+
+## 📝 Important Notes
+
+### ⚠️ **Critical Information**
+
+- **Legendary Models Only**: Only use legendary animal models in hunt configurations to prevent duplication bugs
+- **Hunting Script Conflicts**: Remove legendary animals from other hunting scripts to avoid conflicts
+- **Built-in Skinning**: This script includes its own skinning system derived from vorp_hunting
+
+### 🆕 **Recent Improvements**
+
+- **Item Currency System**: Enhanced logic for item consumption and validation
+- **Keyed Hunt System**: Performance-optimized hunt identification and tracking
+- **Trust System API**: Full export support for cross-resource integration  
+- **Auto Database Management**: Automatic schema creation and migration support
+- **Enhanced Stability**: Improved error handling and resource management
+
+### 🤝 **Community & Support**
+
+- **Open Source**: Feel free to modify and improve the code
+- **Community Sharing**: Please share improvements with the community
+- **Pull Requests**: Contributions and optimizations are welcomed
+
+### 📄 **Credits**
+
+Special thanks to the VORP hunting system for skinning components that were adapted for this script.
+
+---
+
+## 🔗 Repository
+
+**GitHub**: [BryceCanyonCounty/bcc-legendaries](https://github.com/BryceCanyonCounty/bcc-legendaries)
+
+> **Enjoy the hunt! 🏹**
