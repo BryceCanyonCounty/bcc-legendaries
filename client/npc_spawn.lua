@@ -1,8 +1,16 @@
+local Core = exports.vorp_core:GetCore()
+---@type BCCLegendariesDebugLib
+local DBG = BCCLegendariesDebug
+
 function SpawnNpcs(data)
     local modelName = data.npc.model
     local model = joaat(modelName)
 
-    LoadModel(model, modelName)
+    -- Load model
+    if not LoadModel(model, modelName) then
+        DBG.Error(('Failed to load model: %s'):format(modelName))
+        return
+    end
 
     --Blip and waypoint setup
     local blipCoords = data.npc.blip.coords
