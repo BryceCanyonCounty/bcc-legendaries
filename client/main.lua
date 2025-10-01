@@ -1,8 +1,32 @@
+local Core = exports.vorp_core:GetCore()
+---@type BCCLegendariesDebugLib
+local DBG = BCCLegendariesDebug
+
 local MenuPrompt
 local MenuGroup = GetRandomIntInRange(0, 0xffffff)
+local PromptStarted = false
 
 local function StartPrompt()
+    if PromptStarted then
+        DBG.Success('Prompts are already started')
+        return
+    end
+
+    if not MenuGroup then
+        DBG.Error('MenuGroup not initialized')
+        return
+    end
+
+    if not Config or not Config.keys or not Config.keys.menu then
+        DBG.Error('Menu key not configured')
+        return
+    end
+
     MenuPrompt = UiPromptRegisterBegin()
+    if not MenuPrompt or MenuPrompt == 0 then
+        DBG.Error('Failed to register MenuPrompt')
+        return
+    end
     UiPromptSetControlAction(MenuPrompt, Config.keys.menu)
     UiPromptSetText(MenuPrompt, CreateVarString(10, 'LITERAL_STRING', _U('OpenMenu')))
     UiPromptSetVisible(MenuPrompt, true)
@@ -10,6 +34,29 @@ local function StartPrompt()
     UiPromptSetStandardMode(MenuPrompt, true)
     UiPromptSetGroup(MenuPrompt, MenuGroup, 0)
     UiPromptRegisterEnd(MenuPrompt)
+
+    PromptStarted = true
+    DBG.Success('Menu prompt started successfully')
+end
+
+local function isShopClosed(shopCfg)
+    local hour = GetClockHours()
+    local hoursActive = shopCfg.shop.hours.active
+
+    if not hoursActive then
+        return
+    end
+
+    local openHour = shopCfg.shop.hours.open
+    local closeHour = shopCfg.shop.hours.close
+
+    if openHour < closeHour then
+        -- Normal: shop opens and closes on the same day
+        return hour < openHour or hour >= closeHour
+    else
+        -- Overnight: shop closes on the next day
+        return hour < openHour and hour >= closeHour
+    end
 end
 
 local function ManageShopBlips(shop, closed)
@@ -32,35 +79,102 @@ local function ManageShopBlips(shop, closed)
     local color = shopCfg.blip.color.open
     if shopCfg.shop.jobsEnabled then color = shopCfg.blip.color.job end
     if closed then color = shopCfg.blip.color.closed end
-    Citizen.InvokeNative(0x662D364ABF16DE2F, Shops[shop].Blip, joaat(Config.BlipColors[color])) -- BlipAddModifier
+
+    if Config.BlipColors[color] then
+        Citizen.InvokeNative(0x662D364ABF16DE2F, Shops[shop].Blip, joaat(Config.BlipColors[color])) -- BlipAddModifier
+    else
+        print('Error: Blip color not defined for color: ' .. tostring(color))
+    end
 end
 
 local function AddShopNpcs(shop)
-    local shopCfg = Shops[shop]
-
-    if not shopCfg.NPC then
-        local modelName = shopCfg.npc.model
-        local model = joaat(modelName)
-
-        LoadModel(model, modelName)
-
-        shopCfg.NPC = CreatePed(model, shopCfg.npc.coords.x, shopCfg.npc.coords.y, shopCfg.npc.coords.z, shopCfg.npc.heading, false, true, true, true)
-        Citizen.InvokeNative(0x283978A15512B2FE, shopCfg.NPC, true) -- SetRandomOutfitVariation
-        SetEntityCanBeDamaged(shopCfg.NPC, false)
-        SetEntityInvincible(shopCfg.NPC, true)
-        Wait(500)
-        FreezeEntityPosition(shopCfg.NPC, true)
-        SetBlockingOfNonTemporaryEvents(shopCfg.NPC, true)
+    -- Validate shop configuration
+    if not shop then
+        DBG.Error(('Invalid shop: %s'):format(tostring(shop)))
+        return
     end
+
+    local shopCfg = Shops[shop]
+    if not shopCfg or not shopCfg.npc then
+        DBG.Error(('Invalid shop configuration for: %s'):format(tostring(shop)))
+        return
+    end
+
+    -- Check if NPC already exists
+    if shopCfg.NPC then
+        return
+    end
+
+    -- Validate NPC coordinates and model
+    local coords = shopCfg.npc.coords
+    if not coords then
+        DBG.Error(('Invalid NPC coordinates for shop: %s'):format(tostring(shop)))
+        return
+    end
+
+    local modelName = shopCfg.npc.model
+    if not modelName then
+        DBG.Error(('Invalid NPC model for shop: %s'):format(tostring(shop)))
+        return
+    end
+
+    -- Load model
+    local model = joaat(modelName)
+    if not LoadModel(model, modelName) then
+        DBG.Error(('Failed to load NPC model for shop: %s'):format(tostring(shop)))
+        return
+    end
+
+    -- Create NPC
+    shopCfg.NPC = CreatePed(model, shopCfg.npc.coords.x, shopCfg.npc.coords.y, shopCfg.npc.coords.z, shopCfg.npc.heading, false, true, true, true)
+
+    if not shopCfg.NPC or not DoesEntityExist(shopCfg.NPC) then
+        DBG.Error(('Failed to create NPC for shop: %s'):format(tostring(shop)))
+        return
+    end
+
+    -- Configure the NPC
+    Citizen.InvokeNative(0x283978A15512B2FE, shopCfg.NPC, true) -- SetRandomOutfitVariation
+    SetEntityCanBeDamaged(shopCfg.NPC, false)
+    SetEntityInvincible(shopCfg.NPC, true)
+    Wait(500)
+    FreezeEntityPosition(shopCfg.NPC, true)
+    SetBlockingOfNonTemporaryEvents(shopCfg.NPC, true)
+
+    DBG.Success(('NPC created successfully for shop: %s'):format(tostring(shop)))
 end
 
 local function RemoveShopNpcs(shop)
-    local shopCfg = Shops[shop]
-
-    if shopCfg.NPC then
-        DeleteEntity(shopCfg.NPC)
-        shopCfg.NPC = nil
+    -- Validate shop input
+    if not shop then
+        DBG.Error(('Invalid shop: %s'):format(tostring(shop)))
+        return
     end
+
+    -- Check if shop configuration exists
+    local shopCfg = Shops[shop]
+    if not shopCfg then
+        DBG.Error(('Shop configuration not found: %s'):format(tostring(shop)))
+        return
+    end
+
+    -- Check if NPC exists
+    if not shopCfg.NPC then
+        return
+    end
+
+    -- Check if the entity exists before deletion
+    if not DoesEntityExist(shopCfg.NPC) then
+        DBG.Warning(('NPC entity does not exist for shop: %s'):format(tostring(shop)))
+        shopCfg.NPC = nil -- Clean up reference
+        return
+    end
+
+    -- Delete the NPC entity
+    DeleteEntity(shopCfg.NPC)
+    shopCfg.NPC = nil
+
+    DBG.Info(('Successfully removed NPC for shop: %s'):format(tostring(shop)))
 end
 
 CreateThread(function()
@@ -69,67 +183,82 @@ CreateThread(function()
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
         local sleep = 1000
-        local hour = GetClockHours()
 
+        -- Skip processing if player is in menu or dead
         if IsEntityDead(playerPed) then
             if InMission then
                 StopAll = true
                 TriggerServerEvent('bcc-legendaries:ClearActiveHunt')
                 InMission = false
             end
+            Wait(1000)
             goto END
         end
 
-        if InMenu then goto END end
+        if InMenu then
+            Wait(1000)
+            goto END
+        end
 
         for shop, shopCfg in pairs(Shops) do
+            -- Calculate distance to site
             local distance = #(playerCoords - shopCfg.npc.coords)
-            local shopClosed = (shopCfg.shop.hours.active and hour >= shopCfg.shop.hours.close) or (shopCfg.shop.hours.active and hour < shopCfg.shop.hours.open)
+            IsShopClosed = isShopClosed(shopCfg)
+            ManageShopBlips(shop, IsShopClosed)
 
-            if shopClosed then
-                if shopCfg.blip.show then
-                    ManageShopBlips(shop, true)
-                end
+            -- Handle NPC spawning/despawning based on distance and shop status
+            if distance > shopCfg.npc.distance or IsShopClosed then
                 RemoveShopNpcs(shop)
-                if distance <= shopCfg.shop.distance then
-                    sleep = 0
-                    UiPromptSetActiveGroupThisFrame(MenuGroup, CreateVarString(10, 'LITERAL_STRING', shopCfg.shop.name .. _U('hours') ..
-                    shopCfg.shop.hours.open .. _U('to') .. shopCfg.shop.hours.close .. _U('hundred')))
-                    UiPromptSetEnabled(MenuPrompt, false)
-                end
+            elseif shopCfg.npc.active then
+                AddShopNpcs(shop)
+            end
 
+            -- Skip to next site if too far from shop
+            if distance > shopCfg.shop.distance then
+                    goto NEXT_SITE
+            end
+
+            sleep = 0
+
+            -- Set prompt text based on shop status
+            local promptText
+            if IsShopClosed then
+                promptText = ('%s %s %d %s %d %s'):format(
+                    shopCfg.shop.name,
+                    _U('hours'),
+                    shopCfg.shop.hours.open,
+                    _U('to'),
+                    shopCfg.shop.hours.close,
+                    _U('hundred')
+                )
             else
-                if shopCfg.blip.show then
-                    ManageShopBlips(shop, false)
-                end
-                if distance <= shopCfg.npc.distance then
-                    if shopCfg.npc.active then
-                        AddShopNpcs(shop)
-                    end
-                else
-                    RemoveShopNpcs(shop)
-                end
-                if distance <= shopCfg.shop.distance then
-                    sleep = 0
-                    UiPromptSetActiveGroupThisFrame(MenuGroup, CreateVarString(10, 'LITERAL_STRING', shopCfg.shop.prompt))
-                    UiPromptSetEnabled(MenuPrompt, true)
-                    if UiPromptHasStandardModeCompleted(MenuPrompt, 0) then
-                        if shopCfg.shop.jobsEnabled then
-                            local hasJob = Core.Callback.TriggerAwait('bcc-legendaries:CheckJob', shop)
-                            if not hasJob then
-                                Core.NotifyRightTip(_U('NeedJob'), 4000)
-                                goto END
-                            end
+                promptText = shopCfg.shop.prompt
+            end
+
+            UiPromptSetActiveGroupThisFrame(MenuGroup, CreateVarString(10, 'LITERAL_STRING', promptText), 1, 0, 0, 0)
+            -- Enable/disable prompts based on shop status
+            UiPromptSetEnabled(MenuPrompt, not IsShopClosed)
+
+            -- Handle prompt interactions
+            if not IsShopClosed then
+                -- Shop menu prompt
+                if UiPromptHasStandardModeCompleted(MenuPrompt, 0) then
+                    if shopCfg.shop.jobsEnabled then
+                        local hasJob = Core.Callback.TriggerAwait('bcc-legendaries:CheckJob', shop)
+                        if not hasJob then
+                            Core.NotifyRightTip(_U('NeedJob'), 4000)
+                            goto NEXT_SITE
                         end
-                        local trust = 0
-                        if Config.levelSystem.active then
-                            trust = Core.Callback.TriggerAwait('bcc-legendaries:CheckPlayerTrust')
-                            if not trust then goto END end
-                        end
-                        OpenHuntMenu(shop, trust)
                     end
+                    local trust = 0
+                    if Config.trustSystem.active then
+                        trust = Core.Callback.TriggerAwait('bcc-legendaries:CheckPlayerTrust')
+                        if not trust then goto NEXT_SITE end
+                    end
+                    OpenHuntMenu(shop, trust)
                 end
             end
+            ::NEXT_SITE::
         end
         ::END::
         Wait(sleep)
