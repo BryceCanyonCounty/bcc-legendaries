@@ -1,3 +1,7 @@
+local Core = exports.vorp_core:GetCore()
+---@type BCCLegendariesDebugLib
+local DBG = BCCLegendariesDebug
+
 --Pulled and modified from vorp_hunting
 function SkinnedPed(legendaryPed, data)
     while true do
@@ -18,7 +22,7 @@ function SkinnedPed(legendaryPed, data)
                     local playerPed = PlayerPedId()
                     local playergate = playerPed == ped
                     if playergate == true and bool_unk == 1 and model == model2 then --if the variable Animal is the legendary
-                        TriggerServerEvent('bcc-legendaries:GiveItems', data.id)
+                        TriggerServerEvent('bcc-legendaries:GiveItems', data.huntKey)
                         Wait(300000)
                         DeletePed(legendaryPed)
                         break
