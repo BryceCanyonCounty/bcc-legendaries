@@ -1,25 +1,48 @@
-Core = exports.vorp_core:GetCore()
+local Core = exports.vorp_core:GetCore()
+---@type BCCLegendariesDebugLib
+local DBG = BCCLegendariesDebug
 
 InMenu, StopAll, InMission = false, false, false
 
 function LoadModel(model, modelName)
-    if not IsModelValid(model) then
-        print('Invalid model:', modelName)
-        return
+    -- Validate input
+    if not model or not modelName then
+        DBG.Error(('Invalid model or modelName for LoadModel: %s, %s'):format(tostring(model), tostring(modelName)))
+        return false
     end
 
+    -- Check if model is already loaded
+    if HasModelLoaded(model) then
+        DBG.Success(('Model already loaded: %s'):format(tostring(modelName)))
+        return true
+    end
+
+    -- Check if model is valid
+    if not IsModelValid(model) then
+        DBG.Error(('Invalid model: %s'):format(tostring(modelName)))
+        return false
+    end
+
+    -- Request model
+    DBG.Info(('Requesting model: %s'):format(tostring(modelName)))
     RequestModel(model, false)
 
-    local timeout = 10000
+    -- Set timeout (5 seconds)
+    local timeout = 5000
     local startTime = GetGameTimer()
 
+    -- Wait for model to load
     while not HasModelLoaded(model) do
+        -- Check for timeout
         if GetGameTimer() - startTime > timeout then
-            print('Failed to load model:', modelName)
-            return
+            DBG.Error(('Timeout while loading model: %s'):format(tostring(modelName)))
+            return false
         end
         Wait(10)
     end
+
+    DBG.Success(('Model loaded successfully: %s'):format(tostring(modelName)))
+    return true
 end
 
 function StartGPS(x, y, z)
