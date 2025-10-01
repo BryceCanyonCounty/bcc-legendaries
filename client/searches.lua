@@ -1,3 +1,7 @@
+local Core = exports.vorp_core:GetCore()
+---@type BCCLegendariesDebugLib
+local DBG = BCCLegendariesDebug
+
 function SearchSetup(type, x, y, z, data)
     -- Chest Setup
     local chest = CreateObject(joaat('p_chest01x'), x, y, z - 1, true, false, false)
