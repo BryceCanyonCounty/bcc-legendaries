@@ -193,6 +193,11 @@ CreateThread(function()
             end
             Wait(1000)
             goto END
+        else
+            -- Reset StopAll flag when player is alive (after respawn)
+            if StopAll then
+                StopAll = false
+            end
         end
 
         if InMenu then
