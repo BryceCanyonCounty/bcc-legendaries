@@ -23,6 +23,7 @@ function SkinnedPed(legendaryPed, data)
                     local playergate = playerPed == ped
                     if playergate == true and bool_unk == 1 and model == model2 then --if the variable Animal is the legendary
                         TriggerServerEvent('bcc-legendaries:GiveItems', data.huntKey)
+                        InMission = false
                         Wait(300000)
                         DeletePed(legendaryPed)
                         break
