@@ -100,7 +100,6 @@ function SpawnAnimal(data)
             return
         end
         if IsEntityDead(legendaryPed) then
-            InMission = false
             SkinnedPed(legendaryPed, data)
             break
         end
